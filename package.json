@@ -1,0 +1,10 @@
+{
+  "name": "gadugy-mvp",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Gadugy MVP: a private matching community for values-driven LA homeschool families.",
+  "scripts": {
+    "start": "python3 -m http.server 5178 --bind 127.0.0.1",
+    "check": "python3 - <<'PY'\nfrom pathlib import Path\nhtml=Path('index.html').read_text()\nassert '<title>Gadugy' in html\nassert 'gadugy.com' in html\nassert 'Cherokee word meaning people banding together' in html\nassert all(x in html for x in ['id=\"landing\"','id=\"intake\"','id=\"profile\"','id=\"matches\"','id=\"detail\"','id=\"messages\"'])\nprint('Gadugy static checks passed')\nPY"
+  }
+}
