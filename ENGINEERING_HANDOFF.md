@@ -1,81 +1,25 @@
-# Engineering Handoff — Gadugy MVP
+# Gadugy MVP — Engineering Handoff
 
 ## Project
 
-**Gadugy** is a standalone MVP for values-driven Los Angeles homeschool and preparing-to-homeschool families with children ages 0–9 to find and meet nearby families based on shared morals, values, hopes for the future, family goals, education philosophy, child ages, faith/worldview preferences, technology attitudes, and location.
+**Gadugy** is a local family-matching MVP for values-driven Los Angeles homeschool and preparing-to-homeschool families with children ages 0–9.
 
-**Domain:** `gadugy.com`  
-**Meaning:** Gadugy is a Cherokee word meaning people banding together to work for the community.
+Domain: `gadugy.com`  
+Repo: `https://github.com/Mollyqueen/gadugy-mvp`  
+Current hosting: GitHub Pages from `main` branch root  
+Local path: `/Users/mollywang/good-soil-families-mvp`
 
-## Repo / Paths
+## Brand Meaning
 
-- GitHub repo: `https://github.com/Mollyqueen/gadugy-mvp`
-- Local path: `/Users/mollywang/good-soil-families-mvp`
-- Current deploy target: GitHub Pages from `main` branch root
-- Custom domain: `gadugy.com`
-- Key file: `index.html`
+Gadugy is a Cherokee word meaning people banding together to work for the community.
 
-## Current Deployment Status
+## Current State
 
-GitHub Pages is configured and built:
+The current MVP is a static clickable prototype in:
 
-- Source: `main` branch, `/` root
-- CNAME: `gadugy.com`
-- DNS: Namecheap PremiumDNS should point root `A` records to GitHub Pages and `www` CNAME to `Mollyqueen.github.io`
-- HTTPS is pending GitHub certificate issuance. Do not change DNS while certificate is pending unless DNS is wrong.
+- `index.html`
 
-Correct DNS records:
-
-```txt
-A @ 185.199.108.153
-A @ 185.199.109.153
-A @ 185.199.110.153
-A @ 185.199.111.153
-CNAME www Mollyqueen.github.io
-```
-
-Check GitHub Pages status:
-
-```bash
-gh api repos/Mollyqueen/gadugy-mvp/pages
-```
-
-Try enabling HTTPS once GitHub certificate exists:
-
-```bash
-gh api -X PUT repos/Mollyqueen/gadugy-mvp/pages -F https_enforced=true
-```
-
-## Current Product Decisions
-
-- Launch geography: Los Angeles County broadly, emphasizing local communities like South Bay, Pasadena, Valley, Glendale/Burbank, Santa Clarita, Long Beach/Torrance-adjacent areas, and other homeschool pockets.
-- Public positioning: “values-driven homeschool families,” not explicitly conservative on the front page.
-- Core promise: “Meet local homeschool families who share your hopes for your children’s future.”
-- Age range: children ages 0–9.
-- Included families: already homeschooling, preparing to homeschool, seriously considering homeschooling, and values-driven families considering alternatives.
-- Matching priorities:
-  - Shared morals/values
-  - Long-term family goals
-  - Education philosophy
-  - Child ages
-  - Local area/community cluster
-  - Faith/worldview importance
-  - Technology/screen-time attitudes
-  - AI vs human matching preference
-- Matching mode: test strict, balanced, and open; current instinct is balanced.
-- Connection model: direct messaging after mutual match.
-- Trust model: manual approval + government ID likely, but timing should be tested.
-- Profile visibility: medium by default, with toggles for what is visible before match, after mutual match, or only used privately for matching.
-- Photos: test with early users; leaning toward photos only after manual review.
-- Child details: age/interests visible, no child names by default, parent controls visibility.
-
-## Government ID Copy To Preserve
-
-> To keep this community safe and parent-only, every family is reviewed before joining. ID verification helps us confirm that real local parents are behind each profile. Your ID is never shown to other families.
-
-## Current Prototype Screens
-
-`index.html` contains a self-contained clickable prototype with six screens:
+It includes six screens:
 
 1. Landing page
 2. Early access / intake start
@@ -84,99 +28,184 @@ gh api -X PUT repos/Mollyqueen/gadugy-mvp/pages -F https_enforced=true
 5. Match detail page
 6. Mutual messaging screen
 
-## Local Commands
+Supporting product docs:
 
-Run locally:
+- `README.md`
+- `landing-page-copy.md`
+- `intake-questionnaire.md`
+- `mvp-spec.md`
+- `validation-plan.md`
+- `brand-shortlist.md`
+
+## Current Deployment
+
+GitHub Pages has been enabled and built successfully.
+
+Namecheap DNS was changed to GitHub Pages records:
+
+- `A @ 185.199.108.153`
+- `A @ 185.199.109.153`
+- `A @ 185.199.110.153`
+- `A @ 185.199.111.153`
+- `CNAME www Mollyqueen.github.io`
+
+At time of handoff, public DNS was resolving correctly, but some local/browser caches may still show old Namecheap forwarding. HTTPS certificate was not available yet from GitHub Pages, so HTTPS enforcement may need to be retried later.
+
+## Commands
+
+Run static validation:
 
 ```bash
-cd /Users/mollywang/good-soil-families-mvp
 npm run check
-npm run start
 ```
 
-Preview:
+Start local server:
+
+```bash
+npm start
+```
+
+Then open:
 
 ```txt
 http://127.0.0.1:5178/index.html
 ```
 
-Commit/push changes:
+Deploy workflow:
 
 ```bash
-cd /Users/mollywang/good-soil-families-mvp
-git status
 git add .
 git commit -m "feat: describe change"
 git push origin main
 ```
 
-GitHub Pages deploys from `main` automatically.
+GitHub Pages should rebuild automatically.
 
-## Recommended Engineering Next Steps
+## Product Requirements
 
-### Phase 1 — Make current static MVP production-clean
+### Positioning
 
-1. Keep `index.html` functional and readable.
-2. Add clear “Join LA Early Access” form action or integrate with a real form provider.
-3. Add analytics/tracking for CTA clicks and screen navigation.
-4. Ensure mobile responsiveness for all six screens.
-5. Add Open Graph/meta tags for sharing.
-6. Verify `gadugy.com` HTTPS once GitHub cert is issued.
+Public-facing language should use:
 
-### Phase 2 — Convert prototype into a real app shell
+- Values-driven families
+- Homeschool and preparing-to-homeschool families
+- Shared hopes for children’s future
+- Local family community
+- Parent friendships, playdates, co-op possibilities, learning pods, long-term local village
 
-Recommended stack:
+Avoid leading with overt political language. The audience is conservative / values-driven, but the landing page should stay warm, wholesome, rooted, and practical.
 
-- Next.js or Vite/React
-- Supabase for auth/database
-- Resend or similar for transactional email
-- Stripe later for founding membership/payment tests
+### Audience
 
-Core tables likely needed:
+- Los Angeles County broadly
+- Emphasize South Bay, Pasadena, the Valley, Glendale/Burbank, Santa Clarita, Long Beach/Torrance-adjacent areas, and similar local communities
+- Families with children ages 0–9
+- Already homeschooling, preparing to homeschool, seriously considering homeschooling, or considering values-driven alternative education
 
-- `families`
-- `parents`
-- `children_age_ranges`
-- `profile_answers`
-- `profile_visibility_settings`
-- `verification_statuses`
-- `match_scores`
-- `connection_requests`
-- `messages`
-- `reports_blocks`
-- `admin_notes`
+### Matching Criteria
 
-### Phase 3 — Build real MVP features
+Initial matching should emphasize:
 
-1. Auth / parent account
-2. Family profile intake
-3. Privacy controls
-4. Manual approval admin dashboard
-5. Rules-based matching engine
-6. Recommended matches view
-7. Limited browse mode
-8. Mutual connection requests
-9. Direct messaging after mutual match
-10. Verification status workflow
+- Shared morals / values
+- Long-term family goals
+- Education philosophy
+- Child ages
+- Location / LA community cluster
+- Faith/worldview importance
+- Technology and screen-time attitudes
+- AI vs human matching preference
+- Desired community type
 
-## Product Artifacts In Repo
+### Safety / Trust
 
-- `README.md`
-- `brand-shortlist.md`
-- `landing-page-copy.md`
-- `intake-questionnaire.md`
-- `mvp-spec.md`
-- `validation-plan.md`
-- `ENGINEERING_HANDOFF.md`
+Keep this copy:
 
-## Acceptance Criteria For Immediate Engineering Agent Work
+> To keep this community safe and parent-only, every family is reviewed before joining. ID verification helps us confirm that real local parents are behind each profile. Your ID is never shown to other families.
 
-A successful first engineering pass should:
+Safety assumptions:
 
-- Keep the site live and deployable from GitHub Pages.
-- Not break the existing six-screen clickable prototype.
-- Preserve Gadugy branding and meaning.
-- Preserve the government ID trust copy.
-- Add or improve only clearly scoped functionality.
-- Run `npm run check` before committing.
-- Push changes to `main` or open a PR, depending on Jimmy’s preference.
+- Manual approval is important
+- Government ID verification is likely, but timing should be tested
+- Direct messaging opens only after mutual match
+- Child names should not be visible by default
+- Preferred direction: children’s ages + interests visible, no names, parent controls visibility
+- Photos should be tested with early users; current leaning is photos only after manual review
+
+### Testing Assumptions
+
+Test matching strictness:
+
+1. Strict: fewer, stronger matches
+2. Balanced: strong matches first, broader browse second
+3. Open: wider browsing with filters
+
+Current instinct: balanced.
+
+Test ID timing:
+
+- Before profile approval
+- Before appearing in matches
+- Before messaging
+- Before events
+
+Test revenue:
+
+- Free early access
+- $49/year founding family membership
+- $9–$19/month membership
+- Paid messaging/connect
+- Paid curated local events
+
+## Engineering Roadmap
+
+### Phase 0 — Static MVP polish
+
+- Improve responsive/mobile layout
+- Add real early-access CTA behavior
+- Add analytics events
+- Add SEO/social metadata
+- Add favicon/logo assets
+- Add privacy policy placeholder and community guidelines page
+
+### Phase 1 — Validation backend
+
+Fast path:
+
+- Keep static frontend
+- Add Tally/Typeform or custom form endpoint
+- Store applications in Airtable/Supabase
+- Manual approval in Airtable/Supabase
+- Manual/AI-assisted matching in admin workflow
+
+Recommended production-ish path:
+
+- Convert to Next.js or keep static + Supabase
+- Supabase tables for family profiles, applications, preferences, match suggestions, connection requests, messages
+- Add auth later, after landing/intake validates
+
+### Phase 2 — Real app MVP
+
+- Auth
+- Family profiles
+- Privacy controls
+- Admin review queue
+- Verification status
+- Matching score
+- Recommended matches
+- Browse filters
+- Mutual connect request
+- Direct messaging after mutual match
+- Report/block
+- Metrics dashboard
+
+## Acceptance Criteria For Next Engineering Agent
+
+Before marking a task complete:
+
+1. `npm run check` passes.
+2. Local preview works.
+3. If deployed, GitHub Pages/custom domain is checked.
+4. All copy remains aligned with warm, rooted, values-driven positioning.
+5. No child-identifying details are exposed by default.
+6. Commit and push changes to `main` unless instructed to use a PR branch.
+
