@@ -5,6 +5,6 @@
   "description": "Gadugy MVP: a private matching community for values-driven LA homeschool families.",
   "scripts": {
     "start": "python3 -m http.server 5178 --bind 127.0.0.1",
-    "check": "python3 - <<'PY'\nfrom pathlib import Path\nhtml=Path('index.html').read_text()\nassert '<title>Gadugy' in html\nassert 'gadugy.com' in html\nassert 'Cherokee word meaning people banding together' in html\nassert all(x in html for x in ['id=\"landing\"','id=\"intake\"','id=\"profile\"','id=\"matches\"','id=\"detail\"','id=\"messages\"'])\nprint('Gadugy static checks passed')\nPY"
+    "check": "python3 - <<'PY'\nfrom pathlib import Path\nhtml=Path('index.html').read_text()\nassert '<title>Gadugy' in html\nassert 'gadugy.com' in html\nassert 'Cherokee word meaning people banding together' in html\nassert all(x in html for x in ['id=\"landing\"','id=\"intake\"','id=\"profile\"','id=\"matches\"','id=\"detail\"','id=\"messages\"'])\nassert 'property=\"og:title\"' in html\nassert 'name=\"twitter:card\"' in html\nassert 'rel=\"icon\"' in html\nassert 'data-analytics' in html\nassert 'id=\"early-access-form\"' in html\nassert 'handleEarlyAccessSubmit' in html\nassert 'id=\"privacy\"' in html and 'id=\"guidelines\"' in html\nassert 'No child names are required or shown publicly by default.' in html\nprint('Gadugy static checks passed')\nPY"
   }
 }

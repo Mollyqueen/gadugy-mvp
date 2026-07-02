@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Gadugy — MVP Prototype</title>
   <meta name="description" content="Gadugy is a private, curated matching community for values-driven LA homeschool families." />
+  <link rel="canonical" href="https://gadugy.com/" />
+  <meta property="og:title" content="Gadugy — Local family matching for values-driven LA homeschool families" />
+  <meta property="og:description" content="Join early access for a private, reviewed community helping Los Angeles homeschool and preparing-to-homeschool families find nearby families with shared hopes." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://gadugy.com/" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Gadugy — LA homeschool family matching" />
+  <meta name="twitter:description" content="Private early access for values-driven LA families seeking parent friendships, playdates, co-op possibilities, and a long-term local village." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%233f4b2b'/%3E%3Cpath d='M36 12c-13 5-20 16-18 32 15-1 25-9 28-27-6 5-12 12-17 21' fill='none' stroke='%23fffaf0' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
   <style>
     :root {
       --soil: #3e2d1f;
@@ -419,6 +428,11 @@
 
     .footer-cta { text-align:center; padding: 80px 22px; }
     .footer-cta .panel { max-width: 820px; margin: 0 auto; }
+    .notice { border:1px solid rgba(94,109,59,.22); background:rgba(94,109,59,.10); color:var(--olive-dark); border-radius:18px; padding:14px 16px; font:800 13px/1.45 "Avenir Next", Avenir, sans-serif; }
+    .form-status { display:none; margin-top:16px; }
+    .form-status.on { display:block; }
+    .footer-links { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:18px; }
+    .footer-links a { color:var(--soil-2); font:800 13px/1 "Avenir Next", Avenir, sans-serif; }
 
     .mobile-only { display:none; }
 
@@ -451,6 +465,8 @@
         <button data-nav="matches" onclick="showScreen('matches')">Matches</button>
         <button data-nav="detail" onclick="showScreen('detail')">Match Detail</button>
         <button data-nav="messages" onclick="showScreen('messages')">Messaging</button>
+        <button data-nav="privacy" onclick="showScreen('privacy')">Privacy</button>
+        <button data-nav="guidelines" onclick="showScreen('guidelines')">Guidelines</button>
       </div>
     </nav>
   </header>
@@ -464,8 +480,8 @@
           <h1>Meet local homeschool families who share your hopes for your children’s future.</h1>
           <p class="lead">Gadugy is a private, curated matching community for values-driven LA families with children ages 0–9 who want nearby parent friendships, playdates, homeschool community, and deeper alignment around education, character, faith, technology, and family life.</p>
           <div class="hero-actions">
-            <a class="primary" href="#" onclick="showScreen('intake')">Join LA Early Access</a>
-            <a class="ghost" href="#" onclick="showScreen('matches')">Preview matching</a>
+            <a class="primary" href="#" data-analytics="cta_join_hero" onclick="trackEvent('cta_join_hero'); showScreen('intake')">Join LA Early Access</a>
+            <a class="ghost" href="#" data-analytics="cta_preview_matching" onclick="trackEvent('cta_preview_matching'); showScreen('matches')">Preview matching</a>
           </div>
           <div class="trust-strip">
             <div class="trust-pill">Every family is reviewed before joining.</div>
@@ -540,7 +556,8 @@
         <div class="panel">
           <h2>LA early access is opening first.</h2>
           <p class="lead" style="margin-left:auto;margin-right:auto">Starting across Los Angeles County, especially community clusters like South Bay, Pasadena, the Valley, Glendale/Burbank, Santa Clarita, Long Beach/Torrance-adjacent areas, and nearby homeschool pockets.</p>
-          <a class="primary" href="#" onclick="showScreen('intake')">Join LA Early Access</a>
+          <a class="primary" href="#" data-analytics="cta_join_footer" onclick="trackEvent('cta_join_footer'); showScreen('intake')">Join LA Early Access</a>
+          <div class="footer-links"><a href="#" onclick="showScreen('privacy')">Privacy principles</a><a href="#" onclick="showScreen('guidelines')">Community guidelines</a></div>
         </div>
       </div>
     </section>
@@ -557,26 +574,30 @@
         <div class="panel">
           <h2>Tell us where your family is starting.</h2>
           <p class="lead">Good matches start with local context, children’s ages, and the kind of village you hope to build.</p>
-          <div class="field-grid">
-            <div><label>Parent first name</label><input value="Molly" /></div>
-            <div><label>Email</label><input value="family@example.com" /></div>
-            <div><label>LA community cluster</label><select><option>Pasadena / Altadena / San Marino area</option><option>South Bay</option><option>San Fernando Valley</option><option>Glendale / Burbank / La Cañada</option><option>Long Beach / Lakewood / Torrance-adjacent</option></select></div>
-            <div><label>Homeschool stage</label><select><option>Preparing to homeschool</option><option>Already homeschooling</option><option>Seriously considering homeschooling</option><option>Considering alternative education</option></select></div>
-          </div>
-          <div style="height:24px"></div>
-          <label>Children’s age ranges</label>
-          <div class="option-grid">
-            <div class="check selected">0–2 baby / toddler</div><div class="check selected">3–4 preschool</div><div class="check selected">5–7 early elementary</div><div class="check">8–9 upper early elementary</div>
-          </div>
-          <div style="height:24px"></div>
-          <label>What are you hoping to find first?</label>
-          <div class="option-grid">
-            <div class="check selected">Parent friendships</div><div class="check selected">Child playdates</div><div class="check selected">Park days</div><div class="check selected">Co-op families</div><div class="check">Learning pod possibilities</div><div class="check selected">Long-term local village</div>
-          </div>
-          <div style="height:24px"></div>
-          <label>Short family introduction</label>
-          <textarea>We are preparing to homeschool and hope to meet nearby families who care about character, joyful childhood, strong family bonds, and a low-screen home rhythm.</textarea>
-          <div class="hero-actions" style="margin-top:24px;margin-bottom:0"><a class="primary" href="#" onclick="showScreen('profile')">Continue to profile builder</a><a class="ghost" href="#" onclick="showScreen('landing')">Back</a></div>
+          <form id="early-access-form" onsubmit="handleEarlyAccessSubmit(event)">
+            <div class="field-grid">
+              <div><label for="parent-name">Parent first name</label><input id="parent-name" name="parentName" value="Molly" required /></div>
+              <div><label for="parent-email">Email</label><input id="parent-email" name="email" type="email" value="family@example.com" required /></div>
+              <div><label for="community-cluster">LA community cluster</label><select id="community-cluster" name="cluster" required><option>Pasadena / Altadena / San Marino area</option><option>South Bay</option><option>San Fernando Valley</option><option>Glendale / Burbank / La Cañada</option><option>Long Beach / Lakewood / Torrance-adjacent</option><option>Westside</option><option>Santa Clarita</option><option>Other LA County area</option></select></div>
+              <div><label for="homeschool-stage">Homeschool stage</label><select id="homeschool-stage" name="stage" required><option>Preparing to homeschool</option><option>Already homeschooling</option><option>Seriously considering homeschooling</option><option>Considering alternative education</option></select></div>
+            </div>
+            <div style="height:24px"></div>
+            <label>Children’s age ranges</label>
+            <div class="option-grid" data-field="ageRanges">
+              <div class="check selected">0–2 baby / toddler</div><div class="check selected">3–4 preschool</div><div class="check selected">5–7 early elementary</div><div class="check">8–9 upper early elementary</div>
+            </div>
+            <div style="height:24px"></div>
+            <label>What are you hoping to find first?</label>
+            <div class="option-grid" data-field="communityGoals">
+              <div class="check selected">Parent friendships</div><div class="check selected">Child playdates</div><div class="check selected">Park days</div><div class="check selected">Co-op families</div><div class="check">Learning pod possibilities</div><div class="check selected">Long-term local village</div>
+            </div>
+            <div style="height:24px"></div>
+            <label for="family-intro">Short family introduction</label>
+            <textarea id="family-intro" name="intro" required>We are preparing to homeschool and hope to meet nearby families who care about character, joyful childhood, strong family bonds, and a low-screen home rhythm.</textarea>
+            <div class="notice" style="margin-top:18px">To keep this community safe and parent-only, every family is reviewed before joining. ID verification helps us confirm that real local parents are behind each profile. Your ID is never shown to other families.</div>
+            <div id="early-access-status" class="form-status notice" role="status">Early access draft saved locally. Your email app should open with a pre-filled application to send to hello@gadugy.com.</div>
+            <div class="hero-actions" style="margin-top:24px;margin-bottom:0"><button class="primary" type="submit" data-analytics="early_access_submit">Submit early access interest</button><a class="ghost" href="#" onclick="showScreen('profile')">Preview profile builder</a><a class="ghost" href="#" onclick="showScreen('landing')">Back</a></div>
+          </form>
         </div>
       </div>
     </section>
@@ -722,19 +743,96 @@
         </section>
       </div>
     </section>
+
+    <section id="privacy" class="screen">
+      <div class="container section-grid">
+        <div>
+          <div class="eyebrow">Privacy principles</div>
+          <h2>Designed to protect families before it grows.</h2>
+          <p class="lead">Gadugy should feel thoughtful and protective, not invasive. The early MVP keeps sensitive details private by default while testing what families need to trust a local match.</p>
+        </div>
+        <div class="panel">
+          <h3>What families can expect</h3>
+          <div class="value-list">
+            <div class="value-row"><span>No child names are required or shown publicly by default.</span><span>Default</span></div>
+            <div class="value-row"><span>Children are represented by age ranges and parent-approved interests.</span><span>Safer</span></div>
+            <div class="value-row"><span>Exact addresses are never shown to other families.</span><span>Private</span></div>
+            <div class="value-row"><span>Faith, worldview, technology, and values answers can be matching-only.</span><span>Controlled</span></div>
+            <div class="value-row"><span>Photos should appear only after manual review while the trust model is tested.</span><span>Reviewed</span></div>
+          </div>
+          <div class="notice" style="margin-top:22px">To keep this community safe and parent-only, every family is reviewed before joining. ID verification helps us confirm that real local parents are behind each profile. Your ID is never shown to other families.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="guidelines" class="screen">
+      <div class="container section-grid">
+        <div>
+          <div class="eyebrow">Community guidelines</div>
+          <h2>A calmer, parent-first local village starts with clear norms.</h2>
+          <p class="lead">These placeholder guidelines set expectations for early families while the application, verification, and matching workflow is validated.</p>
+        </div>
+        <div class="panel">
+          <h3>Early community standards</h3>
+          <div class="value-list">
+            <div class="value-row"><span>Parents and guardians only; every family is reviewed before joining.</span><span>Trust</span></div>
+            <div class="value-row"><span>Meet first in public, family-friendly places.</span><span>Safety</span></div>
+            <div class="value-row"><span>Protect children’s names, photos, schedules, and exact locations.</span><span>Privacy</span></div>
+            <div class="value-row"><span>Respect different homeschool stages and education approaches.</span><span>Warmth</span></div>
+            <div class="value-row"><span>Messaging opens only after both families choose to connect.</span><span>Mutual</span></div>
+            <div class="value-row"><span>Report or decline anything that feels off, pressured, or unsafe.</span><span>Agency</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 </div>
 
 <script>
   const screens = Array.from(document.querySelectorAll('.screen'));
   const navButtons = Array.from(document.querySelectorAll('[data-nav]'));
+  const analytics = window.dataLayer = window.dataLayer || [];
+
+  function trackEvent(name, details = {}) {
+    analytics.push({ event: name, ...details, timestamp: new Date().toISOString() });
+  }
+
   function showScreen(id) {
     screens.forEach(s => s.classList.toggle('active', s.id === id));
     navButtons.forEach(b => b.classList.toggle('active', b.dataset.nav === id));
     localStorage.setItem('gsf-screen', id);
+    trackEvent('screen_view', { screen: id });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
   window.showScreen = showScreen;
+  window.trackEvent = trackEvent;
+
+  function selectedText(field) {
+    return Array.from(document.querySelectorAll(`[data-field="${field}"] .check.selected`)).map(el => el.textContent.trim()).join(', ');
+  }
+
+  function handleEarlyAccessSubmit(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    const application = {
+      parentName: data.get('parentName'),
+      email: data.get('email'),
+      cluster: data.get('cluster'),
+      stage: data.get('stage'),
+      ageRanges: selectedText('ageRanges'),
+      communityGoals: selectedText('communityGoals'),
+      intro: data.get('intro')
+    };
+    localStorage.setItem('gadugy-early-access-draft', JSON.stringify(application));
+    trackEvent('early_access_submit', { cluster: application.cluster, stage: application.stage });
+    const subject = encodeURIComponent('Gadugy LA Early Access Interest');
+    const body = encodeURIComponent(`Parent first name: ${application.parentName}\nEmail: ${application.email}\nLA community cluster: ${application.cluster}\nHomeschool stage: ${application.stage}\nChildren’s age ranges: ${application.ageRanges}\nHoping to find: ${application.communityGoals}\n\nShort family introduction:\n${application.intro}`);
+    document.getElementById('early-access-status').classList.add('on');
+    window.location.href = `mailto:hello@gadugy.com?subject=${subject}&body=${body}`;
+  }
+  window.handleEarlyAccessSubmit = handleEarlyAccessSubmit;
+
   const saved = localStorage.getItem('gsf-screen');
   if (saved && document.getElementById(saved)) showScreen(saved);
 
