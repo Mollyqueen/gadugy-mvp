@@ -434,15 +434,133 @@
     .footer-links { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:18px; }
     .footer-links a { color:var(--soil-2); font:800 13px/1 "Avenir Next", Avenir, sans-serif; }
 
+    .nav-link {
+      color: var(--soil-2);
+      text-decoration: none;
+      font: 800 13px/1 "Avenir Next", Avenir, sans-serif;
+      padding: 10px 12px;
+      border-radius: 999px;
+    }
+    .nav-link:hover { background: rgba(94,109,59,.10); color: var(--olive-dark); }
+    .nav-cta { min-height: 40px; padding: 0 16px; }
+    .prototype-menu { position: relative; }
+    .prototype-menu summary {
+      list-style: none;
+      cursor: pointer;
+      color: var(--soil-2);
+      padding: 10px 12px;
+      border-radius: 999px;
+      font: 800 13px/1 "Avenir Next", Avenir, sans-serif;
+    }
+    .prototype-menu summary::-webkit-details-marker { display: none; }
+    .prototype-menu summary:hover { background: rgba(94,109,59,.10); color: var(--olive-dark); }
+    .prototype-panel {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 10px);
+      display: grid;
+      gap: 4px;
+      min-width: 190px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,250,240,.98);
+      box-shadow: var(--soft-shadow);
+    }
+    .prototype-panel button { text-align: left; }
+
+    .hero-redesign { grid-template-columns: 1fr .86fr; gap: 54px; }
+    .hero-copy { max-width: 720px; }
+    .origin-note {
+      margin: -10px 0 18px;
+      color: var(--soil-2);
+      font: 800 14px/1.45 "Avenir Next", Avenir, sans-serif;
+    }
+    .founder-card {
+      max-width: 640px;
+      margin: 26px 0;
+      padding: 20px 22px;
+      border-left: 4px solid var(--seed);
+      border-radius: 0 22px 22px 0;
+      background: rgba(255,250,240,.70);
+      box-shadow: 0 12px 28px rgba(62,45,31,.07);
+    }
+    .founder-card span {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--olive-dark);
+      font: 900 12px/1 "Avenir Next", Avenir, sans-serif;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .founder-card p { margin: 0; color: var(--soil-2); font: 600 16px/1.62 "Avenir Next", Avenir, sans-serif; }
+    .proof-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+    .proof-bar span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(94,109,59,.20);
+      border-radius: 999px;
+      background: rgba(94,109,59,.10);
+      color: var(--olive-dark);
+      padding: 10px 13px;
+      font: 900 12px/1 "Avenir Next", Avenir, sans-serif;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .proof-bar span::before { content: "✓"; color: var(--olive-dark); }
+    .trust-center { min-height: auto; padding: 28px; }
+    .trust-center::before { display: none; }
+    .trust-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; margin-bottom: 20px; }
+    .trust-head h3 { max-width: 390px; margin-bottom: 0; font-size: 28px; }
+    .trust-card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+    .trust-card {
+      min-height: 145px;
+      padding: 18px;
+      border: 1px solid rgba(62,45,31,.12);
+      border-radius: 22px;
+      background: rgba(255,250,240,.78);
+    }
+    .trust-card strong { display: block; color: var(--soil); font: 900 17px/1.12 "Avenir Next", Avenir, sans-serif; margin-bottom: 9px; }
+    .trust-card span { color: var(--muted); font: 650 13px/1.48 "Avenir Next", Avenir, sans-serif; }
+    .mini-form-card {
+      margin-top: 16px;
+      padding: 20px;
+      border-radius: 26px;
+      background: var(--soil);
+      color: var(--cream);
+      box-shadow: var(--soft-shadow);
+    }
+    .mini-form-card .meta { color: rgba(255,244,230,.65); }
+    .mini-row { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid rgba(255,250,240,.13); font: 700 13px/1.35 "Avenir Next", Avenir, sans-serif; }
+    .mini-row span { color: rgba(255,244,230,.65); }
+    .mini-row strong { text-align: right; color: #fff8e8; }
+    .mini-form-card .primary { width: 100%; margin-top: 18px; background: var(--seed); color: var(--soil); box-shadow: none; }
+    .quote-card { background: linear-gradient(180deg, rgba(255,250,240,.86), rgba(250,241,220,.72)); }
+    .process-panel .step { background: rgba(255,250,240,.09); border-color: rgba(255,250,240,.14); }
+    .process-panel .step h3 { color: var(--cream); }
+    .final-cta-card { background: linear-gradient(145deg, rgba(255,250,240,.92), rgba(223,230,207,.62)); }
+
     .mobile-only { display:none; }
 
     @media (max-width: 920px) {
       .nav { align-items:flex-start; flex-direction:column; }
-      .nav-links { width:100%; }
+      .nav-links { width:100%; flex-wrap:wrap; overflow:visible; }
+      .prototype-menu { width: 100%; }
+      .prototype-panel { position: static; margin-top: 8px; }
+      .nav-cta { width: 100%; }
       .hero, .section-grid, .form-shell, .app-shell, .match-layout, .detail-layout, .chat-layout { grid-template-columns: 1fr; }
       .hero { min-height: auto; padding-top: 28px; }
-      .trust-strip, .how, .family-grid, .field-grid, .profile-preview, .option-grid { grid-template-columns: 1fr; }
-      .hero-card { min-height: 540px; }
+      .hero-redesign { gap: 28px; }
+      .trust-strip, .how, .family-grid, .field-grid, .profile-preview, .option-grid, .trust-card-grid { grid-template-columns: 1fr; }
+      .hero-card { min-height: auto; }
+      .trust-head, .mini-row { flex-direction: column; }
+      .mini-row strong { text-align: left; }
       .side-card { position:static; }
       .chat-layout { height:auto; }
       .chat-panel { min-height: 560px; }
@@ -458,106 +576,113 @@
         <i class="brand-mark" aria-hidden="true"></i>
         <span><strong>Gadugy</strong><span>gadugy.com · LA Early Access Prototype</span></span>
       </a>
-      <div class="nav-links" role="tablist">
-        <button class="active" data-nav="landing" onclick="showScreen('landing')">Landing</button>
-        <button data-nav="intake" onclick="showScreen('intake')">Intake</button>
-        <button data-nav="profile" onclick="showScreen('profile')">Profile</button>
-        <button data-nav="matches" onclick="showScreen('matches')">Matches</button>
-        <button data-nav="detail" onclick="showScreen('detail')">Match Detail</button>
-        <button data-nav="messages" onclick="showScreen('messages')">Messaging</button>
+      <div class="nav-links" role="navigation" aria-label="Primary">
+        <a class="nav-link" href="#why" onclick="showLandingAnchor('why', 'nav_why')">Why Gadugy</a>
+        <a class="nav-link" href="#trust" onclick="showLandingAnchor('trust', 'nav_trust')">Trust</a>
         <button data-nav="privacy" onclick="showScreen('privacy')">Privacy</button>
-        <button data-nav="guidelines" onclick="showScreen('guidelines')">Guidelines</button>
+        <details class="prototype-menu">
+          <summary>Prototype screens</summary>
+          <div class="prototype-panel" role="tablist">
+            <button class="active" data-nav="landing" onclick="showScreen('landing')">Landing</button>
+            <button data-nav="intake" onclick="showScreen('intake')">Intake</button>
+            <button data-nav="profile" onclick="showScreen('profile')">Profile</button>
+            <button data-nav="matches" onclick="showScreen('matches')">Matches</button>
+            <button data-nav="detail" onclick="showScreen('detail')">Match detail</button>
+            <button data-nav="messages" onclick="showScreen('messages')">Messaging</button>
+            <button data-nav="guidelines" onclick="showScreen('guidelines')">Guidelines</button>
+          </div>
+        </details>
+        <a class="primary nav-cta" href="#" data-analytics="cta_join_nav" onclick="trackEvent('cta_join_nav'); showScreen('intake')">Join early access</a>
       </div>
     </nav>
   </header>
 
   <main>
     <section id="landing" class="screen active">
-      <div class="container hero">
-        <div>
-          <div class="eyebrow">gadugy.com · Opening first across Los Angeles</div>
-          <div class="bodycopy" style="margin-bottom:18px;color:var(--soil-2);font-weight:800">Gadugy is a Cherokee word meaning people banding together to work for the community.</div>
-          <h1>Meet local homeschool families who share your hopes for your children’s future.</h1>
-          <p class="lead">Gadugy is a private, curated matching community for values-driven LA families with children ages 0–9 who want nearby parent friendships, playdates, homeschool community, and deeper alignment around education, character, faith, technology, and family life.</p>
-          <div class="hero-actions">
-            <a class="primary" href="#" data-analytics="cta_join_hero" onclick="trackEvent('cta_join_hero'); showScreen('intake')">Join LA Early Access</a>
-            <a class="ghost" href="#" data-analytics="cta_preview_matching" onclick="trackEvent('cta_preview_matching'); showScreen('matches')">Preview matching</a>
+      <div class="container hero hero-redesign">
+        <div class="hero-copy">
+          <div class="eyebrow">Private LA early access · reviewed families only</div>
+          <p class="origin-note">Gadugy is a Cherokee word meaning people banding together to work for the community.</p>
+          <h1>Find your family’s local homeschool village — carefully.</h1>
+          <p class="lead">A private, parent-only matching community for values-driven Los Angeles homeschool and preparing-to-homeschool families with children ages 0–9.</p>
+          <div class="founder-card" aria-label="A note from Gadugy">
+            <span>A note from Gadugy</span>
+            <p>We are starting small, reviewing every family by hand, and designing for trust before growth. The goal is not another noisy group — it is a calmer way to meet families you would actually feel good inviting to a park day.</p>
           </div>
-          <div class="trust-strip">
-            <div class="trust-pill">Every family is reviewed before joining.</div>
-            <div class="trust-pill">Child details are protected by default.</div>
-            <div class="trust-pill">Messaging opens only after a mutual match.</div>
+          <div class="hero-actions">
+            <a class="primary" href="#" data-analytics="cta_join_hero" onclick="trackEvent('cta_join_hero'); showScreen('intake')">Request LA early access</a>
+            <a class="ghost" href="#trust" data-analytics="cta_review_trust" onclick="showLandingAnchor('trust', 'cta_review_trust')">See how trust works</a>
+          </div>
+          <div class="proof-bar" aria-label="Trust highlights">
+            <span>Manual approval</span>
+            <span>ID verification likely</span>
+            <span>Mutual-match messaging</span>
           </div>
         </div>
 
-        <aside class="hero-card" aria-label="Local family matching preview">
-          <div class="map-label">
+        <aside class="hero-card trust-center" id="trust" aria-label="Gadugy trust center preview">
+          <div class="trust-head">
             <div>
-              <div class="tiny-label">Local clusters</div>
-              <strong>Los Angeles County</strong>
+              <div class="tiny-label">Trust center</div>
+              <h3>Built for parent confidence before introductions.</h3>
             </div>
-            <div class="status-dot">Curated matches</div>
+            <span class="score">Private beta</span>
           </div>
-          <div class="la-map">
-            <i class="route r1"></i><i class="route r2"></i><i class="route r3"></i>
-            <i class="pin p1" data-area="South Bay"></i>
-            <i class="pin p2" data-area="Pasadena"></i>
-            <i class="pin p3" data-area="Valley"></i>
-            <i class="pin p4" data-area="Long Beach"></i>
-            <i class="pin p5" data-area="Burbank"></i>
+          <div class="trust-card-grid">
+            <div class="trust-card"><strong>Every family reviewed</strong><span>Parent-only community, starting with a curated LA cohort.</span></div>
+            <div class="trust-card"><strong>Children protected</strong><span>No child names are public by default; ages and parent-approved interests are enough.</span></div>
+            <div class="trust-card"><strong>Exact location hidden</strong><span>Families match by local cluster, not home address.</span></div>
+            <div class="trust-card"><strong>Mutual yes first</strong><span>Messaging opens only when both families choose to connect.</span></div>
           </div>
-          <div class="match-card">
-            <div class="match-top">
-              <div>
-                <div class="meta">Suggested family</div>
-                <h3>The Moreno Family</h3>
-                <p class="bodycopy" style="margin-bottom:0">Pasadena area · ages 3, 6 · preparing to homeschool</p>
-              </div>
-              <span class="score">Strong fit</span>
-            </div>
-            <div class="chips"><span class="chip">Character-first</span><span class="chip">Classical curious</span><span class="chip">Low-screen</span></div>
+          <div class="mini-form-card">
+            <div class="meta">Early access application</div>
+            <div class="mini-row"><span>LA cluster</span><strong>Pasadena / South Bay / Valley</strong></div>
+            <div class="mini-row"><span>Stage</span><strong>Homeschooling or preparing</strong></div>
+            <div class="mini-row"><span>First goal</span><strong>Park days, parent friendships, co-op possibilities</strong></div>
+            <a class="primary" href="#" data-analytics="cta_join_trust_card" onclick="trackEvent('cta_join_trust_card'); showScreen('intake')">Start with a short application</a>
           </div>
         </aside>
       </div>
 
-      <div class="container section-grid">
+      <div class="container section-grid" id="why">
         <div>
           <div class="eyebrow">Why this exists</div>
-          <h2>It should not be this hard to find families growing in the same direction.</h2>
-          <p class="lead">Facebook groups are noisy. Park days are hit-or-miss. Co-op lists rarely show deeper alignment. Gadugy helps you find local families with more than just similar zip codes.</p>
+          <h2>Most local groups show who is nearby. Gadugy helps reveal who may fit.</h2>
+          <p class="lead">Families need more than zip code proximity. Gadugy is designed around shared hopes for children, education rhythms, faith and worldview preferences, screen-time posture, and the practical realities of meeting up across Los Angeles.</p>
         </div>
-        <div class="panel">
-          <h3>Built around deeper family alignment</h3>
-          <p class="bodycopy">Matching considers the things that actually shape community fit — values, long-term hopes, education philosophy, faith preferences, children’s ages, local area, parenting rhythms, screen-time attitudes, and comfort with AI-assisted or human-reviewed matching.</p>
+        <div class="panel quote-card">
+          <h3>For families who want a warmer, quieter path.</h3>
+          <p class="bodycopy">Facebook groups can feel noisy. Park days can be hit-or-miss. Co-op lists rarely show deeper alignment. Gadugy gives parents a more thoughtful starting point before they exchange messages or meet in person.</p>
           <div class="value-list">
             <div class="value-row"><span>Shared morals and values</span><span>Core</span></div>
             <div class="value-row"><span>Long-term hopes for children</span><span>Core</span></div>
             <div class="value-row"><span>Education philosophy</span><span>Core</span></div>
             <div class="value-row"><span>Technology and screen-time posture</span><span>New</span></div>
-            <div class="value-row"><span>Faith and worldview importance</span><span>Optional visibility</span></div>
+            <div class="value-row"><span>Faith and worldview importance</span><span>Parent controlled</span></div>
           </div>
         </div>
       </div>
 
       <div class="container">
-        <div class="panel dark">
+        <div class="panel dark process-panel">
           <div class="eyebrow" style="background:rgba(255,250,240,.12); color:#fff5df; border-color:rgba(255,250,240,.16)">How it works</div>
-          <h2>A calmer path from interest to trusted connection.</h2>
+          <h2>A calm path from interest to trusted connection.</h2>
           <div class="how">
-            <div class="step"><div class="num">1</div><h3>Join early access</h3><p class="bodycopy">Tell us where you are in LA and what kind of local family community you hope to find.</p></div>
-            <div class="step"><div class="num">2</div><h3>Create a private profile</h3><p class="bodycopy">Share ages, homeschool stage, values, education hopes, faith preferences, and technology attitudes.</p></div>
-            <div class="step"><div class="num">3</div><h3>Review suggested fits</h3><p class="bodycopy">See why each family may be aligned before sending a connection request.</p></div>
-            <div class="step"><div class="num">4</div><h3>Connect mutually</h3><p class="bodycopy">Direct messaging opens only after both families say yes.</p></div>
+            <div class="step"><div class="num">1</div><h3>Request early access</h3><p class="bodycopy">Share your LA area, homeschool stage, children’s age ranges, and what kind of village you hope to find.</p></div>
+            <div class="step"><div class="num">2</div><h3>Parent review</h3><p class="bodycopy">Gadugy reviews families before joining. ID verification helps confirm real local parents while IDs stay private.</p></div>
+            <div class="step"><div class="num">3</div><h3>See meaningful fits</h3><p class="bodycopy">Suggested matches explain why a family may align before anyone sends a connection request.</p></div>
+            <div class="step"><div class="num">4</div><h3>Connect by mutual yes</h3><p class="bodycopy">Messaging opens only after both families choose to connect, with safety norms built into the flow.</p></div>
           </div>
         </div>
       </div>
 
       <div class="footer-cta">
-        <div class="panel">
-          <h2>LA early access is opening first.</h2>
+        <div class="panel final-cta-card">
+          <div class="eyebrow">Los Angeles first</div>
+          <h2>Join the first carefully reviewed Gadugy cohort.</h2>
           <p class="lead" style="margin-left:auto;margin-right:auto">Starting across Los Angeles County, especially community clusters like South Bay, Pasadena, the Valley, Glendale/Burbank, Santa Clarita, Long Beach/Torrance-adjacent areas, and nearby homeschool pockets.</p>
-          <a class="primary" href="#" data-analytics="cta_join_footer" onclick="trackEvent('cta_join_footer'); showScreen('intake')">Join LA Early Access</a>
-          <div class="footer-links"><a href="#" onclick="showScreen('privacy')">Privacy principles</a><a href="#" onclick="showScreen('guidelines')">Community guidelines</a></div>
+          <a class="primary" href="#" data-analytics="cta_join_footer" onclick="trackEvent('cta_join_footer'); showScreen('intake')">Request LA early access</a>
+          <div class="footer-links"><a href="#" onclick="showScreen('privacy')">Privacy principles</a><a href="#" onclick="showScreen('guidelines')">Community guidelines</a><a href="#" onclick="showScreen('matches')">Preview matching prototype</a></div>
         </div>
       </div>
     </section>
@@ -806,6 +931,16 @@
   }
   window.showScreen = showScreen;
   window.trackEvent = trackEvent;
+
+  function showLandingAnchor(anchorId, eventName) {
+    if (eventName) trackEvent(eventName);
+    showScreen('landing');
+    window.setTimeout(() => {
+      const target = document.getElementById(anchorId);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 80);
+  }
+  window.showLandingAnchor = showLandingAnchor;
 
   function selectedText(field) {
     return Array.from(document.querySelectorAll(`[data-field="${field}"] .check.selected`)).map(el => el.textContent.trim()).join(', ');
