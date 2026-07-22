@@ -149,15 +149,44 @@
   </footer>
 
   <script>
-    document.getElementById('guide-form').addEventListener('submit', function(e){
-      // graceful local confirmation while endpoint is a placeholder
-      var form=e.target, status=document.getElementById('guide-status');
-      if(form.action.includes('YOUR_FORM_ID')){
-        e.preventDefault();
-        status.className='status ok on';
-        status.textContent='Thanks! Your guide is on its way. (Note: connect your email endpoint to start collecting signups.)';
-        if(window.dataLayer) dataLayer.push({event:'guide_download', cluster: document.getElementById('g-cluster').value});
-        form.reset();
+    // ── FUNNEL CONFIG ── paste your Formspree form ID here (from formspree.io)
+    const GADUGY_ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID';
+    document.getElementById('guide-form').action = GADUGY_ENDPOINT;
+
+    document.getElementById('guide-form').addEventListener('submit', async function(e){
+      e.preventDefault();
+      var form = e.target, status = document.getElementById('guide-status');
+      var btn = form.querySelector('button[type="submit"]');
+      var cluster = document.getElementById('g-cluster').value;
+      if (window.dataLayer) dataLayer.push({ event: 'guide_download', cluster: cluster });
+
+      // Placeholder endpoint → friendly local confirmation
+      if (GADUGY_ENDPOINT.includes('YOUR_FORM_ID')) {
+        status.className = 'status ok on';
+        status.textContent = 'Thanks! Your guide is on its way. (Note: email endpoint not connected yet — add your Formspree ID.)';
+        return;
+      }
+      btn.disabled = true; btn.textContent = 'Sending…';
+      try {
+        const res = await fetch(GADUGY_ENDPOINT, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          status.className = 'status ok on';
+          status.textContent = '🎉 You\'re in! Check your inbox — the LA Homeschool Community Starter Guide is on its way.';
+          if (window.dataLayer) dataLayer.push({ event: 'guide_signup_success', cluster: cluster });
+          form.reset();
+        } else {
+          const data = await res.json().catch(() => ({}));
+          throw new Error(data.error || 'Submission failed');
+        }
+      } catch (err) {
+        status.className = 'status err on';
+        status.textContent = 'Something went wrong — please try again, or email hello@gadugy.com and we\'ll send it manually.';
+      } finally {
+        btn.disabled = false; btn.textContent = 'Send me the free guide';
       }
     });
   </script>
