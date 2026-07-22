@@ -543,6 +543,7 @@
         <p class="lead-dark">South Bay, Pasadena, the Valley, Glendale/Burbank, Santa Clarita, Long Beach, and nearby homeschool pockets. Join early and help open your neighborhood.</p>
         <div style="margin-top:30px"><a class="btn btn-primary btn-lg" href="#" data-analytics="cta_join_footer" onclick="trackEvent('cta_join_footer'); showScreen('intake')">Join LA early access</a></div>
         <div class="footer-links">
+          <a href="guide.html">Free LA homeschool guide</a>
           <a href="#" onclick="showScreen('privacy')">Privacy principles</a>
           <a href="#" onclick="showScreen('guidelines')">Community guidelines</a>
           <a href="#" onclick="showScreen('matches')">Preview matching</a>
@@ -581,6 +582,11 @@
               <label>What are you hoping to find first?</label>
               <div class="option-grid" data-field="communityGoals">
                 <div class="check selected">Parent friendships</div><div class="check selected">Child playdates</div><div class="check selected">Park days</div><div class="check selected">Co-op families</div><div class="check">Learning pod possibilities</div><div class="check selected">Long-term local village</div>
+              </div>
+              <div style="height:24px"></div>
+              <div class="field-grid">
+                <div><label for="referral-source">How did you hear about us?</label><select id="referral-source" name="referralSource"><option value="">Choose one…</option><option>A friend told me</option><option>Facebook homeschool group</option><option>Co-op or park day</option><option>Nextdoor</option><option>Instagram</option><option>Google search</option><option>The free LA guide</option><option>Other</option></select></div>
+                <div><label for="referral-code">Friend's name or code (if referred)</label><input id="referral-code" name="referralCode" placeholder="e.g. Sarah" /></div>
               </div>
               <div style="height:24px"></div>
               <label for="family-intro">Short family introduction</label>
@@ -847,12 +853,14 @@
       stage: data.get('stage'),
       ageRanges: selectedText('ageRanges'),
       communityGoals: selectedText('communityGoals'),
-      intro: data.get('intro')
+      intro: data.get('intro'),
+      referralSource: data.get('referralSource'),
+      referralCode: data.get('referralCode')
     };
     localStorage.setItem('gadugy-early-access-draft', JSON.stringify(application));
-    trackEvent('early_access_submit', { cluster: application.cluster, stage: application.stage });
+    trackEvent('early_access_submit', { cluster: application.cluster, stage: application.stage, referralSource: application.referralSource });
     const subject = encodeURIComponent('Gadugy LA Early Access Interest');
-    const body = encodeURIComponent(`Parent first name: ${application.parentName}\nEmail: ${application.email}\nLA community cluster: ${application.cluster}\nHomeschool stage: ${application.stage}\nChildren's age ranges: ${application.ageRanges}\nHoping to find: ${application.communityGoals}\n\nShort family introduction:\n${application.intro}`);
+    const body = encodeURIComponent(`Parent first name: ${application.parentName}\nEmail: ${application.email}\nLA community cluster: ${application.cluster}\nHomeschool stage: ${application.stage}\nChildren's age ranges: ${application.ageRanges}\nHoping to find: ${application.communityGoals}\nHow they heard: ${application.referralSource || '—'}\nReferral code/friend: ${application.referralCode || '—'}\n\nShort family introduction:\n${application.intro}`);
     document.getElementById('early-access-status').classList.add('on');
     window.location.href = `mailto:hello@gadugy.com?subject=${subject}&body=${body}`;
   }
