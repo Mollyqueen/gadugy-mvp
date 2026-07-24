@@ -630,7 +630,7 @@
               <div style="height:24px"></div>
               <label for="nontraditional-subjects">Subjects or experiences you want your kids to learn beyond traditional school</label>
               <textarea id="nontraditional-subjects" name="nontraditionalSubjects" placeholder="Examples: entrepreneurship, debate, practical trades, farming, civics, AI literacy, music production, wilderness skills…"></textarea>
-              <div class="notice">The submit button opens a pre-filled email to hello@gadugy.com and saves a local draft in this browser. This static MVP does that on purpose: there is no production database yet, so sensitive family details are not silently stored on a server before the intake workflow is ready.</div>
+              <div class="notice">Submissions now save to Gadugy's Supabase intake table for manual family review. A local draft is also kept in this browser so the profile builder can pre-fill from these answers.</div>
               <div style="height:24px"></div>
               <div class="field-grid">
                 <div><label for="referral-source">How did you hear about us?</label><select id="referral-source" name="referralSource"><option value="">Choose one…</option><option>A friend told me</option><option>Facebook homeschool group</option><option>Co-op or park day</option><option>Nextdoor</option><option>Instagram</option><option>Google search</option><option>The free LA guide</option><option>Other</option></select></div>
@@ -640,7 +640,7 @@
               <label for="family-intro">Short family introduction</label>
               <textarea id="family-intro" name="intro" required>We are preparing to homeschool and hope to meet nearby families who care about character, joyful childhood, strong family bonds, and a low-screen home rhythm.</textarea>
               <div class="notice">To keep this community safe and parent-only, every family is reviewed before joining. ID verification helps us confirm that real local parents are behind each profile. Your ID is never shown to other families.</div>
-              <div id="early-access-status" class="form-status notice" role="status">Early access draft saved locally. Your email app should open with a pre-filled application to send to hello@gadugy.com.</div>
+              <div id="early-access-status" class="form-status notice" role="status">Your application will be saved securely for manual review. We never show private intake answers to other families by default.</div>
               <div class="hero-ctas" style="margin-top:24px;margin-bottom:0">
                 <button class="btn btn-primary" type="submit" data-analytics="early_access_submit">Submit early access interest</button>
                 <a class="btn btn-outline" href="#" onclick="previewProfileFromIntake(event)">Preview profile builder</a>
@@ -883,6 +883,9 @@
   const screens = Array.from(document.querySelectorAll('.screen'));
   const navButtons = Array.from(document.querySelectorAll('[data-nav]'));
   const analytics = window.dataLayer = window.dataLayer || [];
+  const SUPABASE_URL = 'https://elgexnkkszmuolebfzdz.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_oIZXyl17mRiSQmT_amVCFA_GVxwKo7r';
+  const SUPABASE_INTAKE_TABLE = 'intake_submissions';
 
   function trackEvent(name, details = {}) {
     analytics.push({ event: name, ...details, timestamp: new Date().toISOString() });
@@ -984,6 +987,69 @@
     return application;
   }
 
+  function splitSubmittedValues(value) {
+    return (value || '').split(',').map(item => item.trim()).filter(Boolean);
+  }
+
+  function supabaseConfigured() {
+    return SUPABASE_URL.startsWith('https://') && !SUPABASE_URL.includes('YOUR_PROJECT_REF') && SUPABASE_ANON_KEY && !SUPABASE_ANON_KEY.includes('YOUR_SUPABASE_ANON_KEY');
+  }
+
+  function applicationToSupabaseRow(application) {
+    return {
+      parent_name: application.parentName,
+      email: application.email,
+      community_cluster: application.cluster,
+      other_city: application.otherCity || null,
+      homeschool_stage: application.stage,
+      children_age_ranges: splitSubmittedValues(application.ageRanges),
+      community_goals: splitSubmittedValues(application.communityGoals),
+      homeschool_reasons: application.homeschoolReasons || null,
+      education_aspirations: splitSubmittedValues(application.educationAspirations),
+      education_aspiration_other: application.educationAspirationOther || null,
+      school_issues: application.schoolIssues || null,
+      american_excellence: application.americanExcellence || null,
+      family_values: splitProfileList(application.familyValues),
+      family_interests: application.familyInterests || null,
+      homeschool_fears: application.homeschoolFears || null,
+      distance_preference: application.distancePreference || null,
+      current_setup: application.currentSetup || null,
+      connection_goals: splitSubmittedValues(application.connectionGoals),
+      connection_goal_other: application.connectionGoalOther || null,
+      nontraditional_subjects: application.nontraditionalSubjects || null,
+      price_variant: Number(application.priceVariant),
+      intro: application.intro || null,
+      referral_source: application.referralSource || null,
+      referral_code: application.referralCode || null,
+      profile_snapshot: application,
+      page_url: window.location.href,
+      user_agent: navigator.userAgent,
+      consent_parent_review: true
+    };
+  }
+
+  async function submitIntakeToSupabase(application) {
+    if (!supabaseConfigured()) {
+      throw new Error('Supabase intake is not configured yet. Add your project URL and public anon key in index.html after applying supabase/migrations/20260724000000_create_intake_submissions.sql.');
+    }
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_INTAKE_TABLE}`, {
+      method: 'POST',
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json',
+        Prefer: 'return=representation'
+      },
+      body: JSON.stringify(applicationToSupabaseRow(application))
+    });
+    if (!response.ok) {
+      const message = await response.text();
+      throw new Error(message || 'Supabase intake submission failed.');
+    }
+    const rows = await response.json();
+    return rows[0];
+  }
+
   function readEarlyAccessDraft() {
     try { return JSON.parse(localStorage.getItem('gadugy-early-access-draft') || 'null'); }
     catch { return null; }
@@ -1054,16 +1120,38 @@
   }
   window.previewProfileFromIntake = previewProfileFromIntake;
 
-  function handleEarlyAccessSubmit(event) {
+  async function handleEarlyAccessSubmit(event) {
     event.preventDefault();
     const form = event.currentTarget;
+    const submitButton = form.querySelector('[type="submit"]');
+    const status = document.getElementById('early-access-status');
     const application = saveEarlyAccessDraftFromForm(form);
     hydrateProfileBuilder(application);
     trackEvent('early_access_submit', { cluster: application.cluster, otherCity: application.otherCity, stage: application.stage, referralSource: application.referralSource, priceVariant: application.priceVariant });
-    const subject = encodeURIComponent('Gadugy LA Early Access Interest');
-    const body = encodeURIComponent(`Parent first name: ${application.parentName}\nEmail: ${application.email}\nLA community cluster: ${application.cluster}${application.otherCity ? ` — ${application.otherCity}` : ''}\nHomeschool stage: ${application.stage}\nChildren's age ranges: ${application.ageRanges}\nHoping to find first: ${application.communityGoals}\nFounding member price shown: $${application.priceVariant}/month\n\nWhy considering homeschooling:\n${application.homeschoolReasons || '—'}\n\nEducational aspirations:\n${application.educationAspirations || '—'}${application.educationAspirationOther ? `\nOther aspiration: ${application.educationAspirationOther}` : ''}\n\nIssues with public/private schools:\n${application.schoolIssues || '—'}\n\nAmerican exceptionalism / excellence:\n${application.americanExcellence || '—'}\n\nStrong family values:\n${application.familyValues || '—'}\n\nFamily interests:\n${application.familyInterests || '—'}\n\nFears/frustrations about homeschooling:\n${application.homeschoolFears || '—'}\n\nMeetup distance preference: ${application.distancePreference || '—'}\nCurrent homeschool setup: ${application.currentSetup || '—'}\n\nWhat they hope to gain from meeting families:\n${application.connectionGoals || '—'}${application.connectionGoalOther ? `\nOther hoped-for outcome: ${application.connectionGoalOther}` : ''}\n\nSubjects/experiences beyond traditional school:\n${application.nontraditionalSubjects || '—'}\n\nHow they heard: ${application.referralSource || '—'}\nReferral code/friend: ${application.referralCode || '—'}\n\nShort family introduction:\n${application.intro}`);
-    document.getElementById('early-access-status').classList.add('on');
-    window.location.href = `mailto:hello@gadugy.com?subject=${subject}&body=${body}`;
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = 'Submitting…';
+    }
+    if (status) {
+      status.classList.add('on');
+      status.textContent = 'Saving your early access application for manual review…';
+    }
+    try {
+      const row = await submitIntakeToSupabase(application);
+      if (row?.id) localStorage.setItem('gadugy-intake-submission-id', row.id);
+      trackEvent('early_access_submit_success', { submissionId: row?.id, priceVariant: application.priceVariant });
+      if (status) status.textContent = 'Application received. We review every family manually before opening matches; your profile preview is ready below.';
+      showScreen('profile');
+    } catch (error) {
+      console.error(error);
+      trackEvent('early_access_submit_error', { message: error.message });
+      if (status) status.textContent = `${error.message} Your answers are still saved locally in this browser.`;
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Submit early access interest';
+      }
+    }
   }
   window.handleEarlyAccessSubmit = handleEarlyAccessSubmit;
 
