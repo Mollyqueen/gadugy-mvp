@@ -449,7 +449,7 @@
             <div>
               <div class="eyebrow">The map — live</div>
               <h2>See where Gadugy families are gathering across LA.</h2>
-              <p class="lead-dark">These are the neighborhoods we're opening first. Tap a cluster to see what families there are hoping to find. Your exact home address is never shown to anyone.</p>
+              <p class="lead-dark">These are the neighborhoods we're opening first. Tap a cluster to see what families there are hoping to find. Parents can add specific meetup preferences later in the profile builder.</p>
               <div class="cluster-list">
                 <div class="cluster-row" onclick="focusCluster(34.2805,-118.4619)"><span class="cluster-dot"></span><div><strong>San Fernando Valley</strong><span>Backyard learning pods, dad meetups, practical life skills</span></div></div>
                 <div class="cluster-row" onclick="focusCluster(34.0522,-118.4437)"><span class="cluster-dot"></span><div><strong>The Westside</strong><span>Parent coffees, beach learning days, low-screen rhythms</span></div></div>
@@ -476,7 +476,7 @@
           <p class="lead-dark">Simple, safe, and designed for busy parents.</p>
           <div class="steps">
             <div class="step"><div class="num">1</div><h3>Join early access</h3><p>Tell us your LA neighborhood, kids' ages, and what you hope to find. Takes about 3 minutes.</p></div>
-            <div class="step"><div class="num">2</div><h3>Get reviewed</h3><p>A real person reviews every family. ID verification confirms real local parents — never shown to others.</p></div>
+            <div class="step"><div class="num">2</div><h3>Build your profile</h3><p>After the intake saves, you can refine your goals, boundaries, location comfort, and the kinds of families you hope to meet.</p></div>
             <div class="step"><div class="num">3</div><h3>See your matches</h3><p>Get a short list of nearby families with a plain-language explanation of why you might click.</p></div>
             <div class="step"><div class="num">4</div><h3>Meet in real life</h3><p>Message only after a mutual yes, then meet at a park, library, or community day.</p></div>
           </div>
@@ -518,7 +518,7 @@
               <a class="btn btn-primary" href="#" data-analytics="cta_join_founding" onclick="trackEvent('cta_join_founding', { priceVariant: currentPriceVariant() }); showScreen('intake')">Become a founding member</a>
             </div>
           </div>
-          <div class="trust-note">To keep this community safe and parent-only, every family is reviewed before joining. ID verification helps us confirm that real local parents are behind each profile. Your ID is never shown to other families.</div>
+          <div class="trust-note">Early access families help shape which LA neighborhood clusters open first.</div>
         </div>
       </div>
 
@@ -592,7 +592,7 @@
               </div>
               <div style="height:24px"></div>
               <label for="homeschool-reasons">Why are you considering homeschooling?</label>
-              <textarea id="homeschool-reasons" name="homeschoolReasons" placeholder="Share the reasons that matter most to your family."></textarea>
+              <textarea id="homeschool-reasons" name="homeschoolReasons" placeholder="Share the reasons that matter most to your family." required></textarea>
               <div style="height:24px"></div>
               <label>Educational aspirations for your children</label>
               <div class="option-grid three" data-field="educationAspirations">
@@ -602,23 +602,23 @@
               <input id="education-aspiration-other" name="educationAspirationOther" placeholder="Other aspiration, if any" />
               <div style="height:24px"></div>
               <label for="school-issues">What issues do you have with public or private schools?</label>
-              <textarea id="school-issues" name="schoolIssues" placeholder="Tell us what is not working or what you want to avoid."></textarea>
+              <textarea id="school-issues" name="schoolIssues" placeholder="Tell us what is not working or what you want to avoid." required></textarea>
               <div style="height:24px"></div>
               <label for="american-excellence">What do you love most about American exceptionalism or American excellence?</label>
-              <textarea id="american-excellence" name="americanExcellence" placeholder="Examples: freedom, responsibility, innovation, service, civic duty, courage, entrepreneurship…"></textarea>
+              <textarea id="american-excellence" name="americanExcellence" placeholder="Examples: freedom, responsibility, innovation, service, civic duty, courage, entrepreneurship…" required></textarea>
               <div style="height:24px"></div>
               <label for="family-values">Strong family values</label>
-              <textarea id="family-values" name="familyValues" placeholder="List the values your family stands for."></textarea>
+              <textarea id="family-values" name="familyValues" placeholder="List the values your family stands for." required></textarea>
               <div style="height:24px"></div>
               <label for="family-interests">Family interests</label>
-              <textarea id="family-interests" name="familyInterests" placeholder="What are you, your partner, or your children really into?"></textarea>
+              <textarea id="family-interests" name="familyInterests" placeholder="What are you, your partner, or your children really into?" required></textarea>
               <div style="height:24px"></div>
               <label for="homeschool-fears">Fears or current frustrations about homeschooling</label>
-              <textarea id="homeschool-fears" name="homeschoolFears" placeholder="What feels hard, uncertain, lonely, or logistically challenging right now?"></textarea>
+              <textarea id="homeschool-fears" name="homeschoolFears" placeholder="What feels hard, uncertain, lonely, or logistically challenging right now?" required></textarea>
               <div style="height:24px"></div>
               <div class="field-grid">
                 <div><label for="distance-preference">Meetup distance preference</label><select id="distance-preference" name="distancePreference"><option>Within 5 miles</option><option>Within 10 miles</option><option>Within 20 miles</option><option>Within 30 minutes driving</option><option>Open if the fit is strong</option></select></div>
-                <div><label for="current-setup">Current homeschooling setup</label><input id="current-setup" name="currentSetup" placeholder="e.g. co-op, charter, classical curriculum, unschooling…" /></div>
+                <div><label for="current-setup">Current homeschooling setup</label><input id="current-setup" name="currentSetup" placeholder="e.g. co-op, charter, classical curriculum, unschooling…" required /></div>
               </div>
               <div style="height:24px"></div>
               <label>What do you hope to gain most from meeting families?</label>
@@ -629,8 +629,8 @@
               <input id="connection-goal-other" name="connectionGoalOther" placeholder="Other hoped-for outcome, if any" />
               <div style="height:24px"></div>
               <label for="nontraditional-subjects">Subjects or experiences you want your kids to learn beyond traditional school</label>
-              <textarea id="nontraditional-subjects" name="nontraditionalSubjects" placeholder="Examples: entrepreneurship, debate, practical trades, farming, civics, AI literacy, music production, wilderness skills…"></textarea>
-              <div class="notice">Submissions now save to Gadugy's Supabase intake table for manual family review. A local draft is also kept in this browser so the profile builder can pre-fill from these answers.</div>
+              <textarea id="nontraditional-subjects" name="nontraditionalSubjects" placeholder="Examples: entrepreneurship, debate, practical trades, farming, civics, AI literacy, music production, wilderness skills…" required></textarea>
+              <div class="notice">After you connect, your intake answers save to Gadugy and open the profile builder with your information reflected there. You can add more detail to your profile next.</div>
               <div style="height:24px"></div>
               <div class="field-grid">
                 <div><label for="referral-source">How did you hear about us?</label><select id="referral-source" name="referralSource"><option value="">Choose one…</option><option>A friend told me</option><option>Facebook homeschool group</option><option>Co-op or park day</option><option>Nextdoor</option><option>Instagram</option><option>Google search</option><option>The free LA guide</option><option>Other</option></select></div>
@@ -639,12 +639,9 @@
               <div style="height:24px"></div>
               <label for="family-intro">Short family introduction</label>
               <textarea id="family-intro" name="intro" required>We are preparing to homeschool and hope to meet nearby families who care about character, joyful childhood, strong family bonds, and a low-screen home rhythm.</textarea>
-              <div class="notice">To keep this community safe and parent-only, every early access application is reviewed by a real person before matches open. We are not collecting IDs at this stage.</div>
               <div id="early-access-status" class="form-status notice" role="status">Your application will be saved securely for manual review. We never show private intake answers to other families by default.</div>
               <div class="hero-ctas" style="margin-top:24px;margin-bottom:0">
-                <button class="btn btn-primary" type="submit" data-analytics="early_access_submit">Submit early access interest</button>
-                <a class="btn btn-outline" href="#" onclick="previewProfileFromIntake(event)">Preview profile builder</a>
-                <a class="btn btn-outline" href="#" onclick="showScreen('landing')">Back</a>
+                <button class="btn btn-primary" type="submit" data-analytics="early_access_submit">Connect</button>
               </div>
             </form>
           </div>
@@ -818,7 +815,7 @@
           <section class="panel chat-panel">
             <div class="chat-head"><div><div class="meta">Direct messaging unlocked after mutual match</div><h3>The Moreno Family</h3></div><a class="btn btn-outline btn-sm" href="#" onclick="showScreen('detail')">View profile</a></div>
             <div>
-              <div class="safety-note">Safety reminder: meet first in public places, protect children's private details, and report anything that feels off. ID verification helps confirm real local parents; ID is never shown to other families.</div>
+              <div class="safety-note">Safety reminder: meet first in public places, protect children's private details, and report anything that feels off.</div>
               <div class="messages">
                 <div class="msg them">Hi! We loved your note about wanting a joyful, low-screen childhood and families who are thinking long-term. We're also preparing for kindergarten at home next year.</div>
                 <div class="msg me">So good to meet you here. We're looking for nearby park days and maybe a small rhythm with a few families. Are you usually free weekday mornings?</div>
@@ -848,7 +845,7 @@
             <div class="value-row"><span>Exact addresses are never shown to other families.</span><span class="tag">Private</span></div>
             <div class="value-row"><span>Faith, worldview, technology, and values answers can be matching-only.</span><span class="tag">Controlled</span></div>
             <div class="value-row"><span>Photos appear only after manual review while the trust model is tested.</span><span class="tag">Reviewed</span></div>
-            <div class="notice">To keep this community safe and parent-only, every family is reviewed before joining. ID verification helps us confirm that real local parents are behind each profile. Your ID is never shown to other families.</div>
+
           </div>
         </div>
       </div>
@@ -891,7 +888,20 @@
     analytics.push({ event: name, ...details, timestamp: new Date().toISOString() });
   }
 
+  function intakeCompleted() {
+    return localStorage.getItem('gadugy-intake-completed') === 'true';
+  }
+
   function showScreen(id) {
+    if (id === 'profile' && !intakeCompleted()) {
+      const status = document.getElementById('early-access-status');
+      showScreen('intake');
+      if (status) {
+        status.classList.add('on');
+        status.textContent = 'Please complete the intake form first. After you connect, your profile builder will open with your answers reflected.';
+      }
+      return;
+    }
     screens.forEach(s => s.classList.toggle('active', s.id === id));
     navButtons.forEach(b => b.classList.toggle('active', b.dataset.nav === id));
     localStorage.setItem('gsf-screen', id);
@@ -947,8 +957,11 @@
   function updateOtherCityField() {
     const cluster = document.getElementById('community-cluster');
     const field = document.getElementById('other-city-field');
+    const otherCity = document.getElementById('other-city');
     if (!cluster || !field) return;
-    field.classList.toggle('on', cluster.value === 'Other');
+    const needsOtherCity = cluster.value === 'Other';
+    field.classList.toggle('on', needsOtherCity);
+    if (otherCity) otherCity.required = needsOtherCity;
   }
 
   function collectEarlyAccessApplication(form) {
@@ -1038,7 +1051,7 @@
         apikey: SUPABASE_ANON_KEY,
         Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
         'Content-Type': 'application/json',
-        Prefer: 'return=representation'
+        Prefer: 'return=minimal'
       },
       body: JSON.stringify(applicationToSupabaseRow(application))
     });
@@ -1046,8 +1059,7 @@
       const message = await response.text();
       throw new Error(message || 'Supabase intake submission failed.');
     }
-    const rows = await response.json();
-    return rows[0];
+    return { ok: true };
   }
 
   function readEarlyAccessDraft() {
@@ -1110,16 +1122,6 @@
     setProfileTag('profile-price-variant', application.priceVariant ? `$${application.priceVariant}/month test` : 'Not assigned');
   }
 
-  function previewProfileFromIntake(event) {
-    event.preventDefault();
-    const form = document.getElementById('early-access-form');
-    const application = saveEarlyAccessDraftFromForm(form);
-    hydrateProfileBuilder(application);
-    trackEvent('profile_preview_from_intake', { cluster: application.cluster, priceVariant: application.priceVariant });
-    showScreen('profile');
-  }
-  window.previewProfileFromIntake = previewProfileFromIntake;
-
   async function handleEarlyAccessSubmit(event) {
     event.preventDefault();
     const form = event.currentTarget;
@@ -1138,9 +1140,9 @@
     }
     try {
       const row = await submitIntakeToSupabase(application);
-      if (row?.id) localStorage.setItem('gadugy-intake-submission-id', row.id);
-      trackEvent('early_access_submit_success', { submissionId: row?.id, priceVariant: application.priceVariant });
-      if (status) status.textContent = 'Application received. We review every family manually before opening matches; your profile preview is ready below.';
+      localStorage.setItem('gadugy-intake-completed', 'true');
+      trackEvent('early_access_submit_success', { priceVariant: application.priceVariant });
+      if (status) status.textContent = 'Connected. Your intake is saved and your profile builder is ready.';
       showScreen('profile');
     } catch (error) {
       console.error(error);
@@ -1149,7 +1151,7 @@
     } finally {
       if (submitButton) {
         submitButton.disabled = false;
-        submitButton.textContent = 'Submit early access interest';
+        submitButton.textContent = 'Connect';
       }
     }
   }
