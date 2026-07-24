@@ -630,7 +630,7 @@
               <div style="height:24px"></div>
               <label for="nontraditional-subjects">Subjects or experiences you want your kids to learn beyond traditional school</label>
               <textarea id="nontraditional-subjects" name="nontraditionalSubjects" placeholder="Examples: entrepreneurship, debate, practical trades, farming, civics, AI literacy, music production, wilderness skills…" required></textarea>
-              <div class="notice">After you connect, your intake answers save to Gadugy and open the profile builder with your information reflected there. You can add more detail to your profile next.</div>
+              <div class="notice">After you request early access, your intake answers save to Gadugy and you will see a confirmation page with next steps.</div>
               <div style="height:24px"></div>
               <div class="field-grid">
                 <div><label for="referral-source">How did you hear about us?</label><select id="referral-source" name="referralSource"><option value="">Choose one…</option><option>A friend told me</option><option>Facebook homeschool group</option><option>Co-op or park day</option><option>Nextdoor</option><option>Instagram</option><option>Google search</option><option>The free LA guide</option><option>Other</option></select></div>
@@ -641,9 +641,43 @@
               <textarea id="family-intro" name="intro" required>We are preparing to homeschool and hope to meet nearby families who care about character, joyful childhood, strong family bonds, and a low-screen home rhythm.</textarea>
               <div id="early-access-status" class="form-status notice" role="status">Your application will be saved securely for manual review. We never show private intake answers to other families by default.</div>
               <div class="hero-ctas" style="margin-top:24px;margin-bottom:0">
-                <button class="btn btn-primary" type="submit" data-analytics="early_access_submit">Connect</button>
+                <button class="btn btn-primary" type="submit" data-analytics="early_access_submit">Request Early Access</button>
               </div>
             </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= THANK YOU ================= -->
+    <section id="thankyou" class="screen">
+      <div class="container app-band">
+        <div class="form-shell">
+          <aside class="panel side-card">
+            <div class="eyebrow" style="background:rgba(141,168,120,.10);color:var(--orange-deep);border-color:rgba(141,168,120,.30)">Request received</div>
+            <h3>Check your email for next steps.</h3>
+            <p class="bodycopy">The welcome email explains what happens next while Gadugy opens early access neighborhood by neighborhood.</p>
+          </aside>
+          <div>
+            <div class="panel" style="margin-bottom:20px">
+              <h2>Thank you — your early access request is saved.</h2>
+              <p class="lead-dark">We sent a confirmation to <strong id="thankyou-email">your email</strong>. If it is not in your inbox, check spam or promotions.</p>
+              <div class="notice" id="thankyou-summary">Your answers are saved and ready for review.</div>
+            </div>
+            <div class="profile-preview">
+              <div class="panel">
+                <h3>What happens next</h3>
+                <div class="value-row"><span>1. Confirm your email</span><span class="tag">Inbox</span></div>
+                <div class="value-row"><span>2. Gadugy reviews neighborhood demand and family fit</span><span class="tag">Review</span></div>
+                <div class="value-row"><span>3. When your local cluster opens, you can complete your profile</span><span class="tag">Profile</span></div>
+              </div>
+              <div class="panel">
+                <h3>Your saved request</h3>
+                <div class="value-row"><span>Neighborhood</span><span class="tag" id="thankyou-cluster">Saved</span></div>
+                <div class="value-row"><span>Homeschool stage</span><span class="tag" id="thankyou-stage">Saved</span></div>
+                <div class="value-row"><span>Children's ages</span><span class="tag" id="thankyou-ages">Saved</span></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -712,6 +746,20 @@
               <div class="value-row"><span>Current setup</span><span class="tag" id="profile-current-setup">Preparing to homeschool</span></div>
               <div class="value-row"><span>Hope to gain</span><span class="tag" id="profile-connection-goals">Homeschool support, community, close friends</span></div>
               <div class="value-row"><span>Price bucket shown</span><span class="tag" id="profile-price-variant">$12/month test</span></div>
+            </div>
+            <div class="panel" style="margin-top:20px">
+              <h3>Further profile details</h3>
+              <p class="bodycopy">These extra details are for profile customization after early access is approved. Exact address and sensitive notes stay private by default.</p>
+              <div class="field-grid">
+                <div><label for="profile-nearest-cross-streets">Nearest cross streets or meetup area</label><input id="profile-nearest-cross-streets" placeholder="e.g. Ventura Blvd near Laurel Canyon, or Pasadena near Victory Park" /></div>
+                <div><label for="profile-meetup-rhythm">Ideal meetup rhythm</label><select id="profile-meetup-rhythm"><option>Weekly park days</option><option>Twice monthly</option><option>Flexible / occasional</option><option>Co-op style rhythm</option></select></div>
+              </div>
+              <div style="height:18px"></div>
+              <label for="profile-goals-details">More about your goals and desires</label>
+              <textarea id="profile-goals-details" placeholder="What would make this community genuinely valuable for your family?"></textarea>
+              <div style="height:18px"></div>
+              <label for="profile-boundaries">What you do not want</label>
+              <textarea id="profile-boundaries" placeholder="Examples: long drives, high-pressure co-ops, heavy screens, mismatched schedules, values mismatch…"></textarea>
             </div>
             <div class="panel" style="margin-top:20px">
               <h3>Visibility controls</h3>
@@ -893,12 +941,12 @@
   }
 
   function showScreen(id) {
-    if (id === 'profile' && !intakeCompleted()) {
+    if ((id === 'profile' || id === 'thankyou') && !intakeCompleted()) {
       const status = document.getElementById('early-access-status');
       showScreen('intake');
       if (status) {
         status.classList.add('on');
-        status.textContent = 'Please complete the intake form first. After you connect, your profile builder will open with your answers reflected.';
+        status.textContent = 'Please complete the intake form first. After you request early access, you will see the confirmation page.';
       }
       return;
     }
@@ -906,6 +954,7 @@
     navButtons.forEach(b => b.classList.toggle('active', b.dataset.nav === id));
     localStorage.setItem('gsf-screen', id);
     if (id === 'profile') hydrateProfileBuilder();
+    if (id === 'thankyou') hydrateThankYouPage();
     trackEvent('screen_view', { screen: id });
     window.scrollTo({ top: 0, behavior: 'smooth' });
     // invalidate map sizes when returning to landing
@@ -1122,6 +1171,19 @@
     setProfileTag('profile-price-variant', application.priceVariant ? `$${application.priceVariant}/month test` : 'Not assigned');
   }
 
+  function hydrateThankYouPage(sourceApplication) {
+    const application = sourceApplication || readEarlyAccessDraft();
+    if (!application) return;
+    const cluster = clusterLabel(application);
+    const email = document.getElementById('thankyou-email');
+    if (email && application.email) email.textContent = application.email;
+    setProfileTag('thankyou-cluster', cluster || 'Saved');
+    setProfileTag('thankyou-stage', application.stage || 'Saved');
+    setProfileTag('thankyou-ages', application.ageRanges || 'Saved');
+    const summary = document.getElementById('thankyou-summary');
+    if (summary) summary.textContent = `${application.parentName || 'Your family'} is on the early access list${cluster ? ` for ${cluster}` : ''}. We will email instructions for what comes next.`;
+  }
+
   async function handleEarlyAccessSubmit(event) {
     event.preventDefault();
     const form = event.currentTarget;
@@ -1142,8 +1204,8 @@
       const row = await submitIntakeToSupabase(application);
       localStorage.setItem('gadugy-intake-completed', 'true');
       trackEvent('early_access_submit_success', { priceVariant: application.priceVariant });
-      if (status) status.textContent = 'Connected. Your intake is saved and your profile builder is ready.';
-      showScreen('profile');
+      if (status) status.textContent = 'Request received. Please check your email for next steps.';
+      showScreen('thankyou');
     } catch (error) {
       console.error(error);
       trackEvent('early_access_submit_error', { message: error.message });
@@ -1151,7 +1213,7 @@
     } finally {
       if (submitButton) {
         submitButton.disabled = false;
-        submitButton.textContent = 'Connect';
+        submitButton.textContent = 'Request Early Access';
       }
     }
   }
