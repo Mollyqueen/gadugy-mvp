@@ -643,7 +643,7 @@
               <div id="early-access-status" class="form-status notice" role="status">Early access draft saved locally. Your email app should open with a pre-filled application to send to hello@gadugy.com.</div>
               <div class="hero-ctas" style="margin-top:24px;margin-bottom:0">
                 <button class="btn btn-primary" type="submit" data-analytics="early_access_submit">Submit early access interest</button>
-                <a class="btn btn-outline" href="#" onclick="showScreen('profile')">Preview profile builder</a>
+                <a class="btn btn-outline" href="#" onclick="previewProfileFromIntake(event)">Preview profile builder</a>
                 <a class="btn btn-outline" href="#" onclick="showScreen('landing')">Back</a>
               </div>
             </form>
@@ -669,27 +669,34 @@
           <div>
             <div class="panel" style="margin-bottom:20px">
               <h2>Build the family profile that makes matching meaningful.</h2>
-              <p class="lead-dark">This prototype includes technology and AI matching sections, plus privacy toggles for visibility.</p>
+              <p class="lead-dark">This profile builder now pulls from the early access intake draft, so parents can see how their answers become a match-ready family profile.</p>
+              <div id="profile-intake-summary" class="notice">Complete the early access questionnaire, then preview this page to see those answers shape the profile.</div>
             </div>
             <div class="profile-preview">
               <div class="panel">
                 <h3>Values and long-term hopes</h3>
                 <label>Top character priorities</label>
-                <div class="chips"><span class="chip">Honesty</span><span class="chip">Courage</span><span class="chip">Gratitude</span><span class="chip">Love of truth</span><span class="chip">Family responsibility</span></div>
+                <div class="chips" id="profile-values-chips"><span class="chip">Honesty</span><span class="chip">Courage</span><span class="chip">Gratitude</span><span class="chip">Love of truth</span><span class="chip">Family responsibility</span></div>
                 <div style="height:18px"></div>
                 <label>Why homeschooling now?</label>
-                <textarea>We want more ownership over our children’s formation, stronger family time, and a learning path that can include faith, character, practical skills, and curiosity.</textarea>
+                <textarea id="profile-homeschool-reasons">We want more ownership over our children’s formation, stronger family time, and a learning path that can include faith, character, practical skills, and curiosity.</textarea>
                 <div style="height:18px"></div>
                 <label>What kind of adults are you hoping to raise?</label>
-                <textarea>Faithful, capable, curious, resilient adults who love their family, know how to work hard, and are grounded enough to stand apart from unhealthy culture.</textarea>
+                <textarea id="profile-adult-hopes">Faithful, capable, curious, resilient adults who love their family, know how to work hard, and are grounded enough to stand apart from unhealthy culture.</textarea>
+                <div style="height:18px"></div>
+                <label>School concerns and homeschool fears</label>
+                <textarea id="profile-school-concerns">Concerns and frustrations from the intake will appear here for private matching context.</textarea>
               </div>
               <div class="panel">
                 <h3>Education, faith, and technology</h3>
                 <label>Education styles</label>
-                <div class="chips"><span class="chip">Classical education</span><span class="chip">Real-world skills</span><span class="chip">Changing-future readiness</span><span class="chip">Technology</span><span class="chip">Specialization</span></div>
+                <div class="chips" id="profile-education-chips"><span class="chip">Classical education</span><span class="chip">Real-world skills</span><span class="chip">Changing-future readiness</span><span class="chip">Technology</span><span class="chip">Specialization</span></div>
                 <div style="height:18px"></div>
                 <label>Beyond traditional school</label>
-                <textarea>Entrepreneurship, debate, practical trades, civics, wilderness skills, AI literacy, music, and family-led projects.</textarea>
+                <textarea id="profile-nontraditional-subjects">Entrepreneurship, debate, practical trades, civics, wilderness skills, AI literacy, music, and family-led projects.</textarea>
+                <div style="height:18px"></div>
+                <label>Family interests</label>
+                <textarea id="profile-family-interests">Family interests from the intake will appear here.</textarea>
                 <div style="height:18px"></div>
                 <label>Faith importance in matching</label>
                 <select><option>Important — shared faith matters, exact denomination less important</option></select>
@@ -700,6 +707,14 @@
                 <label>Preferred matching method</label>
                 <select><option>Hybrid: AI suggests, human reviews</option></select>
               </div>
+            </div>
+            <div class="panel" style="margin-top:20px">
+              <h3>Matching preferences from intake</h3>
+              <div class="value-row"><span>Local cluster</span><span class="tag" id="profile-cluster">Pasadena / Foothill area</span></div>
+              <div class="value-row"><span>Distance preference</span><span class="tag" id="profile-distance">Within 10 miles</span></div>
+              <div class="value-row"><span>Current setup</span><span class="tag" id="profile-current-setup">Preparing to homeschool</span></div>
+              <div class="value-row"><span>Hope to gain</span><span class="tag" id="profile-connection-goals">Homeschool support, community, close friends</span></div>
+              <div class="value-row"><span>Price bucket shown</span><span class="tag" id="profile-price-variant">$12/month test</span></div>
             </div>
             <div class="panel" style="margin-top:20px">
               <h3>Visibility controls</h3>
@@ -713,7 +728,7 @@
               <div class="privacy-row"><span>Photos</span><span class="seg"><span>Before</span><span class="on">After manual review</span><span>Private</span></span></div>
               <div class="hero-ctas" style="margin-top:24px;margin-bottom:0">
                 <a class="btn btn-primary" href="#" onclick="showScreen('matches')">Preview recommended matches</a>
-                <a class="btn btn-outline" href="#" onclick="showScreen('intake')">Back to intake</a>
+                <a class="btn btn-outline" href="#" onclick="showScreen('intake')">Edit intake answers</a>
               </div>
             </div>
           </div>
@@ -877,6 +892,7 @@
     screens.forEach(s => s.classList.toggle('active', s.id === id));
     navButtons.forEach(b => b.classList.toggle('active', b.dataset.nav === id));
     localStorage.setItem('gsf-screen', id);
+    if (id === 'profile') hydrateProfileBuilder();
     trackEvent('screen_view', { screen: id });
     window.scrollTo({ top: 0, behavior: 'smooth' });
     // invalidate map sizes when returning to landing
@@ -932,11 +948,9 @@
     field.classList.toggle('on', cluster.value === 'Other');
   }
 
-  function handleEarlyAccessSubmit(event) {
-    event.preventDefault();
-    const form = event.currentTarget;
+  function collectEarlyAccessApplication(form) {
     const data = new FormData(form);
-    const application = {
+    return {
       parentName: data.get('parentName'),
       email: data.get('email'),
       cluster: data.get('cluster'),
@@ -962,7 +976,89 @@
       referralSource: data.get('referralSource'),
       referralCode: data.get('referralCode')
     };
+  }
+
+  function saveEarlyAccessDraftFromForm(form) {
+    const application = collectEarlyAccessApplication(form);
     localStorage.setItem('gadugy-early-access-draft', JSON.stringify(application));
+    return application;
+  }
+
+  function readEarlyAccessDraft() {
+    try { return JSON.parse(localStorage.getItem('gadugy-early-access-draft') || 'null'); }
+    catch { return null; }
+  }
+
+  function splitProfileList(value, fallback = []) {
+    const parts = (value || '').split(/[\n,;]+/).map(x => x.trim()).filter(Boolean);
+    return parts.length ? parts : fallback;
+  }
+
+  function renderProfileChips(id, items) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = '';
+    items.slice(0, 8).forEach(item => {
+      const chip = document.createElement('span');
+      chip.className = 'chip';
+      chip.textContent = item;
+      el.appendChild(chip);
+    });
+  }
+
+  function setProfileText(id, value) {
+    const el = document.getElementById(id);
+    if (el && value) el.value = value;
+  }
+
+  function setProfileTag(id, value) {
+    const el = document.getElementById(id);
+    if (el && value) el.textContent = value;
+  }
+
+  function clusterLabel(application) {
+    if (!application) return '';
+    return application.cluster === 'Other' && application.otherCity ? application.otherCity : application.cluster;
+  }
+
+  function hydrateProfileBuilder(sourceApplication) {
+    const application = sourceApplication || readEarlyAccessDraft();
+    if (!application) return;
+    const cluster = clusterLabel(application);
+    const summary = document.getElementById('profile-intake-summary');
+    if (summary) summary.textContent = `Intake draft loaded for ${application.parentName || 'your family'}${cluster ? ` in ${cluster}` : ''}. These answers now pre-fill the profile preview and matching preferences below.`;
+
+    renderProfileChips('profile-values-chips', splitProfileList(application.familyValues, ['Honesty', 'Courage', 'Gratitude', 'Love of truth', 'Family responsibility']));
+    renderProfileChips('profile-education-chips', splitProfileList(`${application.educationAspirations || ''}${application.educationAspirationOther ? `, ${application.educationAspirationOther}` : ''}`, ['Classical education', 'Real-world skills', 'Changing-future readiness']));
+
+    setProfileText('profile-homeschool-reasons', application.homeschoolReasons);
+    setProfileText('profile-adult-hopes', [application.educationAspirations && `Educational aspirations: ${application.educationAspirations}`, application.americanExcellence && `American excellence: ${application.americanExcellence}`, application.intro && `Family introduction: ${application.intro}`].filter(Boolean).join('\n\n'));
+    setProfileText('profile-school-concerns', [application.schoolIssues && `School concerns: ${application.schoolIssues}`, application.homeschoolFears && `Homeschool fears/frustrations: ${application.homeschoolFears}`].filter(Boolean).join('\n\n'));
+    setProfileText('profile-nontraditional-subjects', application.nontraditionalSubjects);
+    setProfileText('profile-family-interests', application.familyInterests);
+
+    setProfileTag('profile-cluster', cluster);
+    setProfileTag('profile-distance', application.distancePreference);
+    setProfileTag('profile-current-setup', application.currentSetup || application.stage);
+    setProfileTag('profile-connection-goals', [application.connectionGoals, application.connectionGoalOther].filter(Boolean).join(', '));
+    setProfileTag('profile-price-variant', application.priceVariant ? `$${application.priceVariant}/month test` : 'Not assigned');
+  }
+
+  function previewProfileFromIntake(event) {
+    event.preventDefault();
+    const form = document.getElementById('early-access-form');
+    const application = saveEarlyAccessDraftFromForm(form);
+    hydrateProfileBuilder(application);
+    trackEvent('profile_preview_from_intake', { cluster: application.cluster, priceVariant: application.priceVariant });
+    showScreen('profile');
+  }
+  window.previewProfileFromIntake = previewProfileFromIntake;
+
+  function handleEarlyAccessSubmit(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const application = saveEarlyAccessDraftFromForm(form);
+    hydrateProfileBuilder(application);
     trackEvent('early_access_submit', { cluster: application.cluster, otherCity: application.otherCity, stage: application.stage, referralSource: application.referralSource, priceVariant: application.priceVariant });
     const subject = encodeURIComponent('Gadugy LA Early Access Interest');
     const body = encodeURIComponent(`Parent first name: ${application.parentName}\nEmail: ${application.email}\nLA community cluster: ${application.cluster}${application.otherCity ? ` — ${application.otherCity}` : ''}\nHomeschool stage: ${application.stage}\nChildren's age ranges: ${application.ageRanges}\nHoping to find first: ${application.communityGoals}\nFounding member price shown: $${application.priceVariant}/month\n\nWhy considering homeschooling:\n${application.homeschoolReasons || '—'}\n\nEducational aspirations:\n${application.educationAspirations || '—'}${application.educationAspirationOther ? `\nOther aspiration: ${application.educationAspirationOther}` : ''}\n\nIssues with public/private schools:\n${application.schoolIssues || '—'}\n\nAmerican exceptionalism / excellence:\n${application.americanExcellence || '—'}\n\nStrong family values:\n${application.familyValues || '—'}\n\nFamily interests:\n${application.familyInterests || '—'}\n\nFears/frustrations about homeschooling:\n${application.homeschoolFears || '—'}\n\nMeetup distance preference: ${application.distancePreference || '—'}\nCurrent homeschool setup: ${application.currentSetup || '—'}\n\nWhat they hope to gain from meeting families:\n${application.connectionGoals || '—'}${application.connectionGoalOther ? `\nOther hoped-for outcome: ${application.connectionGoalOther}` : ''}\n\nSubjects/experiences beyond traditional school:\n${application.nontraditionalSubjects || '—'}\n\nHow they heard: ${application.referralSource || '—'}\nReferral code/friend: ${application.referralCode || '—'}\n\nShort family introduction:\n${application.intro}`);
