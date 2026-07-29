@@ -38,7 +38,7 @@ The pipeline is: intake insert → Postgres trigger `intake_submissions_welcome_
 
 - Migration: `supabase/migrations/20260724210000_welcome_email_trigger.sql`
 - Secrets (server-only, set via `supabase secrets set`): `RESEND_API_KEY`, `WELCOME_EMAIL_FROM`, `WELCOME_EMAIL_REPLY_TO`.
-- **Deliverability:** while `WELCOME_EMAIL_FROM` is `onboarding@resend.dev`, Resend only delivers to the Resend account owner's email. To email real families, verify `gadugy.com` at resend.com/domains (add their DKIM/SPF DNS records), then set `WELCOME_EMAIL_FROM='Gadugy <hello@gadugy.com>'` via `supabase secrets set`.
+- **Deliverability:** verified sender domain is `contact.gadugy.com`; emails send from `Gadugy <hello@contact.gadugy.com>` with reply-to `hello@gadugy.com`. To change the sender, update `WELCOME_EMAIL_FROM` via `supabase secrets set`.
 
 Never put Resend, Postmark, SendGrid, or SMTP secrets in `index.html`.
 
