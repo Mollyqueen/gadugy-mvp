@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Gadugy — Find your local homeschool village</title>
+  <title>Gadugy ,  Find your local homeschool village</title>
   <meta name="description" content="Gadugy is a private, parent-only community that matches values-driven LA homeschool families with nearby families who share their hopes. Safe, reviewed, and local." />
   <link rel="canonical" href="https://gadugy.com/" />
-  <meta property="og:title" content="Gadugy — Find your local homeschool village in Los Angeles" />
-  <meta property="og:description" content="A private, parent-only community matching values-driven LA homeschool families (ages 0–9) with nearby families who share their hopes. Safe, reviewed, local." />
+  <meta property="og:title" content="Gadugy ,  Find your local homeschool village in Los Angeles" />
+  <meta property="og:description" content="A private, parent-only community matching values-driven LA homeschool families (ages 0-9) with nearby families who share their hopes. Safe, reviewed, local." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://gadugy.com/" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Gadugy — Find your local homeschool village" />
-  <meta name="twitter:description" content="Safe, reviewed, local matching for values-driven LA homeschool families with children ages 0–9." />
+  <meta name="twitter:title" content="Gadugy ,  Find your local homeschool village" />
+  <meta name="twitter:description" content="Safe, reviewed, local matching for values-driven LA homeschool families with children ages 0-9." />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%238da878'/%3E%3Cpath d='M36 12c-13 5-20 16-18 32 15-1 25-9 28-27-6 5-12 12-17 21' fill='none' stroke='%23fffaf0' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -361,7 +361,46 @@
 
     .bodycopy { font: 500 14.5px/1.6 var(--sans); color: var(--muted); }
 
-    /* ---------- Responsive ---------- */
+    /* ---------- Mobile-first ---------- */
+    @media (max-width: 768px) {
+      .container { padding: 0 16px; }
+      .nav { padding: 10px 16px; }
+      .nav-links { gap: 4px; font-size: 14px; }
+      .navlink { padding: 10px 10px; min-height: 44px; display: inline-flex; align-items: center; }
+      .btn { min-height: 48px; padding: 14px 22px; font-size: 15px; }
+      .btn-sm { min-height: 44px; }
+      .hero-ctas { flex-direction: column; align-items: stretch; }
+      .hero-ctas .btn { width: 100%; text-align: center; }
+      .map-hero-inner { padding: 60px 0 70px; }
+      h1 { font-size: clamp(38px, 11vw, 54px); line-height: 1.05; }
+      h2 { font-size: clamp(26px, 7vw, 34px); }
+      .panel, .side-card { padding: 20px; border-radius: 14px; }
+      .app-band { padding: 40px 0; }
+      input, select, textarea { font-size: 16px; min-height: 48px; padding: 12px 14px; } /* 16px prevents iOS zoom */
+      textarea { min-height: 110px; }
+      .check { min-height: 48px; padding: 12px 14px; font-size: 15px; }
+      .chip, .filter-pill { min-height: 44px; display: inline-flex; align-items: center; }
+      .family-card { padding: 16px; }
+      .family-avatar { width: 44px; height: 44px; }
+      .score-ring { width: 100px; height: 100px; }
+      .score-ring div { width: 76px; height: 76px; font-size: 24px; }
+      .msg { max-width: 88%; }
+      .chat-head { flex-direction: column; align-items: flex-start; }
+      .composer { position: sticky; bottom: 0; background: var(--surface); padding: 12px 0; }
+      .value-row { flex-direction: column; align-items: flex-start; gap: 6px; }
+      .privacy-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .hero-ctas [class*="btn-lg"] { width: 100%; }
+      .form-status { font-size: 14px; }
+      .footer-links { flex-direction: column; gap: 12px; }
+      .footer-links a { min-height: 44px; display: inline-flex; align-items: center; }
+      .cluster-row { padding: 14px 12px; }
+      .thread { padding: 12px; }
+      .seg span { padding: 10px 12px; font-size: 12px; }
+      #hero-map { opacity: .25; }
+      #la-map { height: 320px; }
+      .map-feature-grid { gap: 24px; }
+      .topbar { position: sticky; top: 0; z-index: 50; }
+    }
     @media (max-width: 980px) {
       .nav { flex-direction: column; height: auto; padding: 12px 22px; align-items: stretch; gap: 10px; }
       .nav-links { justify-content: center; flex-wrap: wrap; }
@@ -413,7 +452,7 @@
           <div class="map-hero-inner">
             <div class="eyebrow">Private · Parent-only · Los Angeles</div>
             <h1>Find your family's <span class="accent">local homeschool village.</span></h1>
-            <p class="lead">Gadugy matches values-driven LA homeschool families with children ages 0–9 to nearby families who share their hopes — safely, privately, with every family reviewed by a real person.</p>
+            <p class="lead">Gadugy matches values-driven LA homeschool families with children ages 0-9 to nearby families who share their hopes ,  safely, privately, with every family reviewed by a real person.</p>
             <div class="hero-ctas">
               <a class="btn btn-primary btn-lg" href="#" data-analytics="cta_join_hero" onclick="trackEvent('cta_join_hero'); showScreen('intake')">Join LA early access</a>
               <a class="btn btn-outline-light btn-lg" href="#what" onclick="showLandingAnchor('what','cta_what')">What is Gadugy?</a>
@@ -432,11 +471,11 @@
       <div class="story-band" id="what">
         <div class="container">
           <div class="eyebrow" style="background:rgba(141,168,120,.10);color:var(--orange-deep);border-color:rgba(141,168,120,.30)">In plain words</div>
-          <h2>Gadugy helps homeschool families near you find each other — and become friends.</h2>
+          <h2>Gadugy helps homeschool families near you find each other ,  and become friends.</h2>
           <p class="lead-dark">Think of it like a trusted neighborhood introduction service. You tell us about your family. We carefully match you with other local homeschool families who want the same kind of childhood for their kids. Then you meet at a park and see if it clicks.</p>
           <div class="story-grid">
             <div class="story-card"><div class="story-num">01</div><h3>You share your hopes</h3><p>Tell us about your kids' ages, your homeschool stage, and what kind of family community you're looking for.</p></div>
-            <div class="story-card"><div class="story-num">02</div><h3>We find nearby fits</h3><p>We suggest local families who share your values, education hopes, and daily rhythm — explained in plain language.</p></div>
+            <div class="story-card"><div class="story-num">02</div><h3>We find nearby fits</h3><p>We suggest local families who share your values, education hopes, and daily rhythm ,  explained in plain language.</p></div>
             <div class="story-card"><div class="story-num">03</div><h3>You meet in real life</h3><p>Message only when both families say yes, then meet at a park or library and let the kids play.</p></div>
           </div>
         </div>
@@ -447,7 +486,7 @@
         <div class="container">
           <div class="map-feature-grid">
             <div>
-              <div class="eyebrow">The map — live</div>
+              <div class="eyebrow">The map ,  live</div>
               <h2>See where Gadugy families are gathering across LA.</h2>
               <p class="lead-dark">These are the neighborhoods we're opening first. Tap a cluster to see what families there are hoping to find. Parents can add specific meetup preferences later in the profile builder.</p>
               <div class="cluster-list">
@@ -506,7 +545,7 @@
               <div class="badge">Founding member</div>
               <h3>Founding membership</h3>
               <p class="plan-sub">Full access the moment your neighborhood opens.</p>
-              <div class="price"><span id="founding-price-display" data-price-variant="12">$9–$18</span> <small>/ month · founding rate</small></div>
+              <div class="price"><span id="founding-price-display" data-price-variant="12">$9-$18</span> <small>/ month · founding rate</small></div>
               <p id="price-experiment-note" class="plan-sub">We are testing founding member pricing between $9 and $18 to learn what feels sustainable for families.</p>
               <ul>
                 <li>Everything in early access</li>
@@ -583,7 +622,7 @@
               <div style="height:24px"></div>
               <label>Children's age ranges</label>
               <div class="option-grid" data-field="ageRanges">
-                <div class="check selected">0–2 baby / toddler</div><div class="check selected">3–4 preschool</div><div class="check selected">5–7 early elementary</div><div class="check">8–9 upper early elementary</div>
+                <div class="check selected">0-2 baby / toddler</div><div class="check selected">3-4 preschool</div><div class="check selected">5-7 early elementary</div><div class="check">8-9 upper early elementary</div>
               </div>
               <div style="height:24px"></div>
               <label>What are you hoping to find first?</label>
@@ -660,7 +699,7 @@
           </aside>
           <div>
             <div class="panel" style="margin-bottom:20px">
-              <h2>Thank you — your early access request is saved.</h2>
+              <h2>Thank you ,  your early access request is saved.</h2>
               <p class="lead-dark">We sent a confirmation to <strong id="thankyou-email">your email</strong>. If it is not in your inbox, check spam or promotions.</p>
               <div class="notice" id="thankyou-summary">Your answers are saved and ready for review.</div>
             </div>
@@ -730,7 +769,7 @@
                 <textarea id="profile-family-interests">Family interests from the intake will appear here.</textarea>
                 <div style="height:18px"></div>
                 <label>Faith importance in matching</label>
-                <select><option>Important — shared faith matters, exact denomination less important</option></select>
+                <select><option>Important ,  shared faith matters, exact denomination less important</option></select>
                 <div style="height:14px"></div>
                 <label>Technology posture</label>
                 <select><option>Limited and intentional</option></select>
@@ -799,7 +838,7 @@
             <div class="filter-pill">Strict only</div>
             <div class="filter-pill">Open browse</div>
             <div class="filter-pill">Pasadena / Foothill + 20 miles</div>
-            <div class="filter-pill">Ages 0–9</div>
+            <div class="filter-pill">Ages 0-9</div>
             <div class="filter-pill">Low / intentional tech</div>
             <div class="filter-pill">Co-op + park days</div>
           </aside>
@@ -867,7 +906,7 @@
               <div class="messages">
                 <div class="msg them">Hi! We loved your note about wanting a joyful, low-screen childhood and families who are thinking long-term. We're also preparing for kindergarten at home next year.</div>
                 <div class="msg me">So good to meet you here. We're looking for nearby park days and maybe a small rhythm with a few families. Are you usually free weekday mornings?</div>
-                <div class="msg them">Yes — Tuesdays or Thursdays are best. We usually go to a park near Pasadena and would love to start with something simple and public.</div>
+                <div class="msg them">Yes ,  Tuesdays or Thursdays are best. We usually go to a park near Pasadena and would love to start with something simple and public.</div>
                 <div class="msg me">That sounds perfect. Let's pick a park morning and keep it casual for the kids.</div>
               </div>
             </div>
