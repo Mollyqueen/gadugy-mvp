@@ -629,6 +629,22 @@
               <div class="option-grid" data-field="communityGoals">
                 <div class="check selected">Parent friendships</div><div class="check selected">Child playdates</div><div class="check selected">Park days</div><div class="check selected">Co-op families</div><div class="check">Learning pod possibilities</div><div class="check selected">Long-term local village</div>
               </div>
+              <div style="height:12px"></div>
+              <input id="community-goal-other" name="communityGoalOther" placeholder="Something else you're looking for first, if it's not listed above" />
+              <div style="height:24px"></div>
+              <label for="family-culture-words">Three words that describe your family culture</label>
+              <input id="family-culture-words" name="familyCultureWords" placeholder="e.g. warm, outdoorsy, unhurried" required />
+              <div style="height:24px"></div>
+              <label>Core values your family is built on</label>
+              <div class="notice" style="margin-bottom:12px">This is the heart of Gadugy matching. Shared values are how we prevent mismatched friendships before they start. Choose the ones that genuinely matter in your home, not the ones that sound best.</div>
+              <div class="option-grid three" data-field="coreValues">
+                <div class="check selected">Honesty</div><div class="check selected">Faith</div><div class="check">Courage</div><div class="check selected">Gratitude</div><div class="check">Hard work</div><div class="check">Kindness</div><div class="check">Loyalty</div><div class="check">Self-reliance</div><div class="check">Curiosity</div><div class="check">Respect</div><div class="check">Service</div><div class="check">Family first</div><div class="check">Freedom</div><div class="check">Tradition</div><div class="check">Love of truth</div>
+              </div>
+              <div style="height:12px"></div>
+              <input id="core-values-other" name="coreValuesOther" placeholder="A value we didn't list that matters to your family" />
+              <div style="height:24px"></div>
+              <label for="values-in-practice">What does your family stand for? Describe what your values look like in everyday life.</label>
+              <textarea id="values-in-practice" name="valuesInPractice" placeholder="e.g. We eat dinner together every night with no phones. We go to church on Sundays. We expect our kids to tell the truth even when it costs them. We work hard and we finish what we start." required></textarea>
               <div style="height:24px"></div>
               <label for="homeschool-reasons">Why are you considering homeschooling?</label>
               <textarea id="homeschool-reasons" name="homeschoolReasons" placeholder="Share the reasons that matter most to your family." required></textarea>
@@ -1062,6 +1078,11 @@
       stage: data.get('stage'),
       ageRanges: selectedText('ageRanges'),
       communityGoals: selectedText('communityGoals'),
+      communityGoalOther: fieldValue(data, 'communityGoalOther'),
+      familyCultureWords: fieldValue(data, 'familyCultureWords'),
+      coreValues: selectedText('coreValues'),
+      coreValuesOther: fieldValue(data, 'coreValuesOther'),
+      valuesInPractice: fieldValue(data, 'valuesInPractice'),
       homeschoolReasons: fieldValue(data, 'homeschoolReasons'),
       educationAspirations: selectedText('educationAspirations'),
       educationAspirationOther: fieldValue(data, 'educationAspirationOther'),
@@ -1105,6 +1126,11 @@
       homeschool_stage: application.stage,
       children_age_ranges: splitSubmittedValues(application.ageRanges),
       community_goals: splitSubmittedValues(application.communityGoals),
+      community_goal_other: application.communityGoalOther || null,
+      family_culture_words: application.familyCultureWords || null,
+      core_values: splitSubmittedValues(application.coreValues),
+      core_values_other: application.coreValuesOther || null,
+      values_in_practice: application.valuesInPractice || null,
       homeschool_reasons: application.homeschoolReasons || null,
       education_aspirations: splitSubmittedValues(application.educationAspirations),
       education_aspiration_other: application.educationAspirationOther || null,
@@ -1194,7 +1220,7 @@
     const summary = document.getElementById('profile-intake-summary');
     if (summary) summary.textContent = `Intake draft loaded for ${application.parentName || 'your family'}${cluster ? ` in ${cluster}` : ''}. These answers now pre-fill the profile preview and matching preferences below.`;
 
-    renderProfileChips('profile-values-chips', splitProfileList(application.familyValues, ['Honesty', 'Courage', 'Gratitude', 'Love of truth', 'Family responsibility']));
+    renderProfileChips('profile-values-chips', splitProfileList([application.coreValues, application.coreValuesOther, application.familyValues].filter(Boolean).join(', '), ['Honesty', 'Courage', 'Gratitude', 'Love of truth', 'Family responsibility']));
     renderProfileChips('profile-education-chips', splitProfileList(`${application.educationAspirations || ''}${application.educationAspirationOther ? `, ${application.educationAspirationOther}` : ''}`, ['Classical education', 'Real-world skills', 'Changing-future readiness']));
 
     setProfileText('profile-homeschool-reasons', application.homeschoolReasons);
