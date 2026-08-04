@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gadugy — Profile Builder v2 Mockup</title>
+<style>
+  :root {
+    --cream: #fff7e8; --cream-deep: #faf0dc; --sage: #8da878; --sage-soft: #eef3e6;
+    --sage-deep: #5f6f52; --butter: #f6dc9b; --cocoa: #4a3728; --muted: #8a7a68; --white: #fffdf8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Georgia, 'Times New Roman', serif; background: var(--cream); color: var(--cocoa); line-height: 1.6; }
+  .mock-label { position: sticky; top: 0; background: var(--cocoa); color: var(--cream); font-family: -apple-system, sans-serif; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; padding: 8px 20px; z-index: 100; display: flex; justify-content: space-between; }
+  .mock-label span:last-child { opacity: .6; }
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 40px 24px 80px; }
+  h2 { font-size: 26px; margin-bottom: 8px; }
+  .eyebrow { display: inline-block; font-family: -apple-system, sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--sage-deep); background: var(--sage-soft); border: 1px solid rgba(141,168,120,.35); border-radius: 99px; padding: 5px 14px; margin-bottom: 14px; }
+  .helper { color: var(--muted); font-size: 15px; margin-bottom: 24px; }
+  .card { background: var(--white); border: 1px solid #e8dcc8; border-radius: 18px; padding: 36px 40px; box-shadow: 0 4px 20px rgba(74,55,40,.05); }
+  .why { background: var(--sage-soft); border-left: 4px solid var(--sage); border-radius: 0 12px 12px 0; padding: 16px 20px; margin-bottom: 26px; display: flex; gap: 14px; align-items: flex-start; }
+  .why-icon { font-size: 20px; flex-shrink: 0; }
+  .why-title { font-family: -apple-system, sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--sage-deep); margin-bottom: 4px; }
+  .why p { font-size: 14px; color: #55613f; }
+  .field { margin-bottom: 22px; }
+  .field label { display: block; font-family: -apple-system, sans-serif; font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+  .field .field-why { font-family: -apple-system, sans-serif; font-size: 12px; color: var(--muted); margin-bottom: 8px; font-style: italic; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { font-family: -apple-system, sans-serif; font-size: 13px; padding: 8px 16px; border-radius: 99px; border: 1.5px solid #ddd0ba; background: var(--cream); cursor: pointer; color: var(--cocoa); }
+  .chip.on { background: var(--sage); border-color: var(--sage); color: white; }
+  .field textarea, .field input { width: 100%; font-family: inherit; font-size: 15px; padding: 12px 14px; border: 1.5px solid #ddd0ba; border-radius: 12px; background: var(--cream); color: var(--cocoa); }
+  .btn { font-family: -apple-system, sans-serif; font-size: 14px; font-weight: 700; border-radius: 99px; padding: 14px 30px; cursor: pointer; border: none; }
+  .btn-primary { background: var(--sage); color: white; }
+  .btn-quiet { background: none; color: var(--muted); font-weight: 500; font-size: 13px; }
+  .ctas { display: flex; gap: 14px; align-items: center; margin-top: 28px; }
+  .divider { margin: 70px 0 10px; text-align: center; font-family: -apple-system, sans-serif; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  .divider-note { text-align:center; font-family:-apple-system,sans-serif; font-size:12px; color:var(--muted); margin-bottom:30px; }
+  .progress-shell { background: var(--white); border: 1px solid #e8dcc8; border-radius: 18px; padding: 20px 28px; display: flex; align-items: center; gap: 28px; box-shadow: 0 4px 20px rgba(74,55,40,.05); }
+  .tree { font-size: 34px; }
+  .progress-info { flex: 1; }
+  .progress-top { display: flex; justify-content: space-between; align-items: baseline; font-family: -apple-system, sans-serif; margin-bottom: 8px; }
+  .progress-step { font-size: 13px; font-weight: 600; }
+  .progress-time { font-size: 12px; color: var(--muted); }
+  .bar { height: 10px; background: var(--cream-deep); border-radius: 99px; overflow: hidden; }
+  .bar-fill { height: 100%; width: 40%; background: linear-gradient(90deg, var(--sage), var(--sage-deep)); border-radius: 99px; }
+  .meter-note { font-family: -apple-system, sans-serif; font-size: 12px; color: var(--sage-deep); margin-top: 8px; }
+  .strength { font-family: -apple-system, sans-serif; text-align: right; min-width: 190px; }
+  .strength-label { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .strength-value { font-size: 15px; font-weight: 700; color: var(--sage-deep); }
+  .strength-sub { font-size: 12px; color: var(--muted); }
+  .layout { display: grid; grid-template-columns: 280px 1fr; gap: 28px; margin-top: 28px; align-items: start; }
+  .ladder { background: var(--white); border: 1px solid #e8dcc8; border-radius: 18px; padding: 24px; box-shadow: 0 4px 20px rgba(74,55,40,.05); }
+  .ladder h3 { font-size: 17px; margin-bottom: 4px; }
+  .ladder .sub { font-family: -apple-system, sans-serif; font-size: 12px; color: var(--muted); margin-bottom: 18px; }
+  .rung { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px dashed #ece1cd; align-items: center; }
+  .rung:last-child { border-bottom: none; }
+  .rung-dot { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; font-family: -apple-system, sans-serif; }
+  .rung.done .rung-dot { background: var(--sage); color: white; }
+  .rung.current .rung-dot { background: var(--butter); color: var(--cocoa); box-shadow: 0 0 0 3px rgba(246,220,155,.4); }
+  .rung.future .rung-dot { background: var(--cream-deep); color: var(--muted); }
+  .rung-name { font-family: -apple-system, sans-serif; font-size: 13px; font-weight: 600; }
+  .rung.future .rung-name { color: var(--muted); font-weight: 500; }
+  .rung-desc { font-family: -apple-system, sans-serif; font-size: 11px; color: var(--muted); }
+  .rung.current .rung-name { color: var(--sage-deep); }
+  .preview-note { font-family: -apple-system, sans-serif; font-size: 12px; color: var(--sage-deep); background: var(--cream-deep); border-radius: 10px; padding: 10px 14px; margin-top: 8px; }
+  .reward { display: flex; gap: 10px; align-items: center; background: #f4f8ee; border: 1px solid rgba(141,168,120,.4); border-radius: 12px; padding: 12px 16px; font-family: -apple-system, sans-serif; font-size: 13px; color: var(--sage-deep); margin: 24px 0 8px; }
+  .saved { margin-left: auto; font-family: -apple-system, sans-serif; font-size: 12px; color: var(--muted); }
+  .explainer { background: var(--white); border: 1px solid #e8dcc8; border-radius: 18px; padding: 40px; max-width: 640px; margin: 0 auto; box-shadow: 0 4px 20px rgba(74,55,40,.05); }
+  .explainer h2 { font-size: 24px; margin-bottom: 16px; }
+  .explainer p { font-size: 15px; margin-bottom: 14px; color: #5a4a3a; }
+  .order { display: flex; gap: 8px; margin: 20px 0; flex-wrap: wrap; font-family: -apple-system, sans-serif; }
+  .order span { font-size: 12px; font-weight: 600; background: var(--cream-deep); border-radius: 99px; padding: 7px 14px; }
+  .order b { color: var(--sage-deep); align-self: center; }
+  .celebration { background: linear-gradient(180deg, var(--cream) 0%, var(--sage-soft) 100%); border: 1px solid #e8dcc8; border-radius: 18px; padding: 60px 40px; text-align: center; max-width: 640px; margin: 0 auto; }
+  .celebration .big-tree { font-size: 64px; margin-bottom: 16px; }
+  .celebration h2 { font-size: 28px; margin-bottom: 12px; }
+  .celebration p { color: #5a4a3a; max-width: 440px; margin: 0 auto 10px; font-size: 15px; }
+  .celebration .meaning { font-style: italic; color: var(--muted); font-size: 14px; margin-top: 16px; }
+  /* ===== Cluster counter ===== */
+  .cluster-card { background: var(--white); border: 1px solid #e8dcc8; border-radius: 18px; padding: 40px; max-width: 640px; margin: 0 auto; box-shadow: 0 4px 20px rgba(74,55,40,.05); text-align: center; }
+  .cluster-bar { height: 14px; background: var(--cream-deep); border-radius: 99px; overflow: hidden; margin: 20px 0 8px; }
+  .cluster-fill { height: 100%; width: 47%; background: linear-gradient(90deg, var(--sage), var(--sage-deep)); border-radius: 99px; }
+  .cluster-count { font-family: -apple-system, sans-serif; font-size: 13px; font-weight: 700; color: var(--sage-deep); }
+  .cluster-sub { font-size: 14px; color: var(--muted); margin-bottom: 22px; }
+  .share-box { background: var(--cream-deep); border-radius: 14px; padding: 18px 22px; margin-top: 18px; }
+  .share-box p { font-size: 14px; color: #5a4a3a; margin-bottom: 12px; }
+  .share-link { display: flex; gap: 8px; font-family: -apple-system, sans-serif; }
+  .share-link input { flex: 1; font-size: 13px; padding: 10px 12px; border: 1.5px solid #ddd0ba; border-radius: 10px; background: white; color: var(--cocoa); }
+  .share-link button { font-size: 13px; font-weight: 700; border: none; background: var(--sage); color: white; border-radius: 10px; padding: 10px 18px; cursor: pointer; }
+  .founding { display: inline-flex; gap: 10px; align-items: center; background: var(--butter); border-radius: 99px; padding: 8px 18px; font-family: -apple-system, sans-serif; font-size: 12px; font-weight: 700; color: var(--cocoa); margin-top: 20px; }
+  /* ===== Match card ===== */
+  .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 860px; margin: 0 auto; }
+  .match-card { background: var(--white); border: 1px solid #e8dcc8; border-radius: 18px; padding: 26px; box-shadow: 0 4px 20px rgba(74,55,40,.05); }
+  .match-head { display: flex; gap: 14px; align-items: center; margin-bottom: 12px; }
+  .avatar { width: 46px; height: 46px; border-radius: 50%; background: var(--sage); color: white; display: flex; align-items: center; justify-content: center; font-family: -apple-system, sans-serif; font-weight: 700; font-size: 18px; }
+  .match-meta { font-family: -apple-system, sans-serif; font-size: 11px; color: var(--muted); }
+  .match-name { font-size: 17px; font-weight: 700; }
+  .match-bio { font-size: 14px; color: #5a4a3a; margin-bottom: 14px; }
+  .why-card { background: var(--sage-soft); border: 1px solid rgba(141,168,120,.4); border-radius: 12px; padding: 14px 16px; margin-bottom: 14px; }
+  .why-card-title { font-family: -apple-system, sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--sage-deep); margin-bottom: 8px; }
+  .why-row { display: flex; gap: 8px; font-family: -apple-system, sans-serif; font-size: 12px; color: #55613f; padding: 3px 0; }
+  .feedback-row { display: flex; gap: 10px; align-items: center; font-family: -apple-system, sans-serif; }
+  .fb-btn { flex: 1; font-size: 13px; font-weight: 700; padding: 10px; border-radius: 10px; border: 1.5px solid #ddd0ba; background: var(--cream); cursor: pointer; color: var(--cocoa); }
+  .fb-btn.yes { background: var(--sage); border-color: var(--sage); color: white; }
+  .fb-why { font-size: 11px; color: var(--muted); margin-top: 8px; font-style: italic; }
+  /* ===== Email mock ===== */
+  .email { background: var(--white); border: 1px solid #e8dcc8; border-radius: 18px; max-width: 600px; margin: 0 auto; overflow: hidden; box-shadow: 0 4px 20px rgba(74,55,40,.05); }
+  .email-head { background: var(--cream-deep); padding: 16px 28px; font-family: -apple-system, sans-serif; font-size: 12px; color: var(--muted); border-bottom: 1px solid #e8dcc8; }
+  .email-body { padding: 36px 40px; }
+  .email-body p { font-size: 15px; color: #5a4a3a; margin-bottom: 14px; }
+  .email-body h2 { font-size: 22px; margin-bottom: 16px; }
+  .email-btn { display: inline-block; background: var(--sage); color: white; font-family: -apple-system, sans-serif; font-size: 14px; font-weight: 700; border-radius: 99px; padding: 14px 30px; text-decoration: none; margin: 10px 0 16px; }
+  .email-sig { margin-top: 24px; font-size: 15px; }
+  .email-ps { font-size: 13px; color: var(--muted); font-style: italic; margin-top: 18px; border-top: 1px dashed #ece1cd; padding-top: 14px; }
+</style>
+</head>
+<body>
+<div class="mock-label"><span>MOCKUP — Profile Builder v2 + product strategy</span><span>not live · for founder review</span></div>
+<div class="wrap">
+
+<!-- ══════════════════ 1 · ENTRY EXPLAINER ══════════════════ -->
+<div class="divider">1 · Entry explainer (first visit)</div>
+<div class="divider-note">Education layer — sets the philosophy before a single question</div>
+<div class="explainer">
+  <h2>How Gadugy matching works</h2>
+  <p>Most apps match on proximity and hope. Gadugy matches on what actually predicts a lasting friendship — and a real person reviews every family before anyone appears.</p>
+  <div class="order"><span>1 · Shared values</span><b>→</b><span>2 · Distance</span><b>→</b><span>3 · Kids' ages</span><b>→</b><span>4 · Human review</span></div>
+  <p>That's why this profile asks things a normal signup wouldn't. Your answers do two jobs at once: they shape which families we introduce you to, and they become the profile those families see.</p>
+  <p>You control visibility on every sensitive answer — before match, after match, or matching-only.</p>
+  <div class="ctas" style="justify-content:center"><button class="btn btn-primary">Let's begin →</button></div>
+</div>
+
+<!-- ══════════════════ 2 · PROGRESS + LADDER + STEP ══════════════════ -->
+<div class="divider">2 · Profile builder — step 2 of 5</div>
+<div class="divider-note">Endowed progress (starts at 40%) · journey ladder · education panels · reward moment</div>
+
+<div class="progress-shell">
+  <div class="tree">🌱</div>
+  <div class="progress-info">
+    <div class="progress-top">
+      <span class="progress-step">Step 2 of 5 — Your family intro</span>
+      <span class="progress-time">About 10 min total · most is already filled in</span>
+    </div>
+    <div class="bar"><div class="bar-fill"></div></div>
+    <div class="meter-note">✓ Basics confirmed — your matches just got a little sharper</div>
+  </div>
+  <div class="strength">
+    <div class="strength-label">Profile strength</div>
+    <div class="strength-value">Taking shape · 40%</div>
+    <div class="strength-sub">Strong profiles get noticeably better matches</div>
+  </div>
+</div>
+
+<div class="layout">
+  <aside class="ladder">
+    <h3>Your family's journey</h3>
+    <div class="sub">Every step is saved. No rush.</div>
+    <div class="rung done"><div class="rung-dot">✓</div><div><div class="rung-name">New family</div><div class="rung-desc">Intake received</div></div></div>
+    <div class="rung current"><div class="rung-dot">2</div><div><div class="rung-name">Rooted family 🌳</div><div class="rung-desc">Complete your profile</div></div></div>
+    <div class="rung future"><div class="rung-dot">3</div><div><div class="rung-name">Reviewed family</div><div class="rung-desc">A real person welcomes you in</div></div></div>
+    <div class="rung future"><div class="rung-dot">4</div><div><div class="rung-name">Connected family</div><div class="rung-desc">Your first mutual match</div></div></div>
+    <div class="rung future"><div class="rung-dot">5</div><div><div class="rung-name">Gathering family</div><div class="rung-desc">Your first park day</div></div></div>
+    <div class="rung future"><div class="rung-dot">6</div><div><div class="rung-name">Pillar family</div><div class="rung-desc">You brought another family in</div></div></div>
+  </aside>
+
+  <div class="card">
+    <span class="eyebrow">Step 2 of 5</span>
+    <h2>Introduce your family</h2>
+    <p class="helper">A few warm sentences are plenty. Write it like you'd introduce yourself at a park day.</p>
+
+    <div class="why">
+      <div class="why-icon">💡</div>
+      <div>
+        <div class="why-title">Why we ask this</div>
+        <p>This is the first thing reviewed families read. Specific beats polished — "Saturday pancakes and creek walks" tells another family more about fit than a perfect paragraph.</p>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Short family introduction</label>
+      <div class="field-why">Visible to reviewed families in your area. Children's names are never shown unless you add them — we suggest first initials.</div>
+      <textarea rows="4">We're a family of four in Pasadena preparing to homeschool. Our days look like slow mornings, lots of read-alouds, and creek walks. We'd love to meet families who care about character and a low-screen childhood.</textarea>
+      <div class="preview-note">👁 Live preview: this is exactly how nearby families will meet you.</div>
+    </div>
+
+    <div class="field">
+      <label>Three words that describe your family culture</label>
+      <div class="field-why">These become chips on your profile — the fastest way for another parent to feel "they're our kind of people."</div>
+      <div class="chips"><span class="chip on">Warm</span><span class="chip on">Outdoorsy</span><span class="chip on">Unhurried</span><span class="chip">Faith-filled</span><span class="chip">Bookish</span><span class="chip">Hands-on</span><span class="chip">Playful</span></div>
+    </div>
+
+    <div class="reward">🌿 <span><strong>Nice — your matches just got meaningfully sharper.</strong> Intro + culture words are the two highest-signal parts of your profile.</span></div>
+
+    <div class="ctas">
+      <button class="btn btn-primary">Continue →</button>
+      <button class="btn btn-quiet">I'll do this later</button>
+      <span class="saved">Saved ✓ — pick up where you left off anytime</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ 3 · JTBD QUESTION ══════════════════ -->
+<div class="divider">3 · The understanding question (new — step 3 addition)</div>
+<div class="divider-note">Feedback item 1 — directly asks the job-to-be-done; answer segments the family's whole experience</div>
+
+<div class="card" style="max-width:760px;margin:0 auto">
+  <span class="eyebrow">Step 3 of 5</span>
+  <h2>What would make this worth it?</h2>
+  <p class="helper">One honest sentence tells us more than ten checkboxes.</p>
+
+  <div class="why">
+    <div class="why-icon">💡</div>
+    <div>
+      <div class="why-title">Why we ask this</div>
+      <p>Families come to Gadugy wanting different things — a co-op with real academics, mom friends who get it, dads who show up, kids with one close friend nearby. When we know what "worth it" looks like for you, everything we suggest starts from your answer — not a generic idea of community.</p>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Six months from now, what would make you say "Gadugy was worth it"?</label>
+    <div class="field-why">Never shown to other families — it shapes your matching, not your profile.</div>
+    <textarea rows="3" placeholder="e.g. My daughter has one real friend within 10 minutes of us. / We found our Tuesday-morning co-op. / I have two moms I can actually call."></textarea>
+  </div>
+
+  <div class="field">
+    <label>Which of these is closest to what you're hoping for first?</label>
+    <div class="chips"><span class="chip on">Close friends for my kids</span><span class="chip">A co-op or learning rhythm</span><span class="chip">Parent friendships</span><span class="chip">Whole-family community</span><span class="chip">Still figuring it out</span></div>
+  </div>
+
+  <div class="ctas"><button class="btn btn-primary">Continue →</button><span class="saved">Saved ✓</span></div>
+</div>
+
+<!-- ══════════════════ 4 · WHY THIS FAMILY CARD + FEEDBACK LOOP ══════════════════ -->
+<div class="divider">4 · Match suggestions with "why this family" + feedback loop</div>
+<div class="divider-note">Feedback item 1 — every suggestion explains itself; every 👍/👎 teaches the matching</div>
+
+<div class="match-grid">
+  <div class="match-card">
+    <div class="match-head"><div class="avatar">M</div><div><div class="match-meta">PASADENA · 2.8 MI · AGES 3 &amp; 6</div><div class="match-name">The Moreno Family</div></div></div>
+    <p class="match-bio">Preparing to homeschool. Looking for parent friendships, park days, and literature-rich learning in a low-screen rhythm.</p>
+    <div class="why-card">
+      <div class="why-card-title">Why this family</div>
+      <div class="why-row">✓ You both put <strong>honesty</strong> and <strong>love of truth</strong> in your top values</div>
+      <div class="why-row">✓ Their 6-year-old and your 5-year-old are in the same age window</div>
+      <div class="why-row">✓ Both low-screen, both hoping for weekday park days</div>
+      <div class="why-row">✓ 2.8 miles — close enough for a Tuesday morning</div>
+    </div>
+    <div class="feedback-row">
+      <button class="fb-btn yes">👍 Interested</button>
+      <button class="fb-btn">Not a fit</button>
+    </div>
+    <div class="fb-why">Tapped "not a fit"? One word why (too far, ages, style) makes every future suggestion better.</div>
+  </div>
+
+  <div class="match-card">
+    <div class="match-head"><div class="avatar" style="background:var(--butter);color:var(--cocoa)">H</div><div><div class="match-meta">ALTADENA · 4.1 MI · AGES 4 &amp; 7</div><div class="match-name">The Hendricks Family</div></div></div>
+    <p class="match-bio">First-year homeschooling. Building a small Tuesday co-op, big on outdoor time and practical skills.</p>
+    <div class="why-card">
+      <div class="why-card-title">Why this family</div>
+      <div class="why-row">✓ You both said <strong>"a co-op or learning rhythm"</strong> is what you're hoping for first</div>
+      <div class="why-row">✓ Overlapping education styles: classical + real-world skills</div>
+      <div class="why-row">✓ Their Tuesday co-op is forming now — timing fits your "preparing" stage</div>
+    </div>
+    <div class="feedback-row">
+      <button class="fb-btn yes">👍 Interested</button>
+      <button class="fb-btn">Not a fit</button>
+    </div>
+    <div class="fb-why">Your feedback is private and shapes matching only — the other family never sees it.</div>
+  </div>
+</div>
+
+<!-- ══════════════════ 5 · CLUSTER-FILL COUNTER ══════════════════ -->
+<div class="divider">5 · Cluster-fill counter (families outside Pasadena, or pre-launch)</div>
+<div class="divider-note">Feedback item 2 — honest status + the one action that moves it. Weakness becomes the growth engine.</div>
+
+<div class="cluster-card">
+  <span class="eyebrow">Long Beach / Torrance / Lakewood</span>
+  <h2>Your neighborhood is filling up</h2>
+  <p class="helper" style="margin-bottom:0">We open one neighborhood at a time — starting with <strong>Pasadena &amp; the Foothill area</strong>, where the founding cluster is forming now. Your area opens when about <strong>15 reviewed families</strong> are nearby — that's the point where everyone finds real matches, not an empty app.</p>
+  <div class="cluster-bar"><div class="cluster-fill"></div></div>
+  <div class="cluster-count">You're #7 of ~15 needed to open Long Beach</div>
+  <p class="cluster-sub" style="margin-top:10px">The fastest way to open your neighborhood isn't waiting — it's one family telling another.</p>
+  <div class="share-box">
+    <p><strong>Know one local family who belongs here?</strong> Send them your link — if they join, your neighborhood moves one family closer, and you become a <strong>Pillar family</strong> when it opens.</p>
+    <div class="share-link"><input value="gadugy.com/join?via=moreno" readonly><button>Copy link</button></div>
+  </div>
+  <div class="founding">🌱 Founding families in open clusters lock founding-member pricing for life</div>
+</div>
+
+<!-- ══════════════════ 6 · FOUNDING OFFER (Pasadena beachhead) ══════════════════ -->
+<div class="divider">6 · Founding-family offer (Pasadena beachhead — in-cluster view)</div>
+<div class="divider-note">Feedback item 2 — first ~20 families ARE the inventory; pay them in status + locked pricing</div>
+
+<div class="cluster-card">
+  <span class="eyebrow">Pasadena / Foothill — founding cluster</span>
+  <h2>You're one of the founding families</h2>
+  <p class="helper" style="margin-bottom:0">Pasadena is where Gadugy opens first. The first twenty reviewed families here aren't just members — they're the village everyone else joins.</p>
+  <div class="cluster-bar"><div class="cluster-fill" style="width:60%"></div></div>
+  <div class="cluster-count">12 of ~20 founding spots filled</div>
+  <div class="share-box">
+    <p><strong>As a founding family:</strong> founding-member pricing locked for life · first to be matched when the cluster opens · "Founding family" marker on your profile, forever.</p>
+    <p style="margin-bottom:0"><strong>The one thing we'd ask:</strong> if one Pasadena family comes to mind who should be here, send them your link. Founding families grow this place the way it should grow — one trusted introduction at a time.</p>
+  </div>
+</div>
+
+<!-- ══════════════════ 7 · CELEBRATION ══════════════════ -->
+<div class="divider">7 · Completion moment — Rooted family rung</div>
+<div class="divider-note">Seedling → tree · no confetti · honest timeline</div>
+
+<div class="celebration">
+  <div class="big-tree">🌳</div>
+  <h2>Your family is rooted here</h2>
+  <p>Your profile is complete and in the review queue. A real person — not an algorithm — reads every family. You'll hear from us within <strong>2–3 days</strong>, and the moment your neighborhood's cluster opens, you'll be among the first families introduced.</p>
+  <p class="meaning">Gadugy means people banding together for the good of the community. That's what you just did.</p>
+  <div class="ctas" style="justify-content:center;margin-top:24px"><button class="btn btn-primary">Done</button><button class="btn btn-quiet">Know a family who belongs here? Share Gadugy →</button></div>
+</div>
+
+<!-- ══════════════════ 8 · RETENTION BRIDGE EMAIL ══════════════════ -->
+<div class="divider">8 · Retention bridge — monthly neighborhood update email</div>
+<div class="divider-note">For families waiting on a cluster to fill. Keeps them warm without fake urgency. Signed Jimmy and Sara.</div>
+
+<div class="email">
+  <div class="email-head">From: Jimmy and Sara at Gadugy &lt;hello@contact.gadugy.com&gt; · Subject: How Long Beach is growing 🌱</div>
+  <div class="email-body">
+    <h2>A quick note on your neighborhood</h2>
+    <p>Hi {{first_name}},</p>
+    <p>Once a month we send one short update to families waiting on their neighborhood — no noise, just the honest picture.</p>
+    <p><strong>Long Beach / Torrance / Lakewood: 9 of ~15 families.</strong> Two families joined this month — a first-year homeschool family near El Dorado Park and a family of five in Lakewood hoping for exactly the kind of park-day rhythm you described.</p>
+    <p>Pasadena, our first cluster, opens this month with its founding families. Everything we learn there comes straight to your neighborhood when it opens.</p>
+    <p>If one local family comes to mind who'd love this, your link moves Long Beach one family closer: <strong>gadugy.com/join?via={{code}}</strong></p>
+    <p>And as always — hit reply if you want to tell us what you're hoping for. We read every note.</p>
+    <div class="email-sig">With gratitude,<br><strong>Jimmy and Sara</strong><br>Founders, Gadugy</div>
+    <div class="email-ps">P.S. Rather not get the monthly update? One click and we'll only email you when your neighborhood opens — no hard feelings.</div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

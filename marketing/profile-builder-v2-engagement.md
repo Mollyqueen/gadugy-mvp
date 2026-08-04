@@ -175,3 +175,23 @@ Founders, Gadugy
 ---
 
 *Handoff: hooks, meter labels, ladder rungs, and education snippets map directly to profile-builder sections in `index.html`. Voice per `post-signup-onboarding.md`; on conflict this document wins for post-signup surfaces. SMS stays unsent until a distinct-job trigger (cluster opening or human conversation opener) is implemented.*
+
+---
+
+## 6. Product strategy addendum (founder session, 2026-07-30)
+
+### Beachhead decision
+**Pasadena / Foothill is cluster #1.** Founders' personal network is there; founder network beats geography. Do not open a second cluster until Pasadena reaches liquidity: **~15–20 reviewed families within ~15-min drive**, enough for every new family to see 3–5 plausible matches.
+
+### Understanding the user (beyond one-shot intake)
+- **JTBD question** added to profile builder: *"Six months from now, what would make you say 'Gadugy was worth it'?"* + closest-goal chip (kids' friends / co-op / parent friends / whole-family / unsure). Never shown to families; drives matching segments.
+- **Behavioral feedback loop**: every match suggestion carries 👍 Interested / Not a fit + one-word-why (too far, ages, style). Feedback is private, matching-only, and is the primary way matching improves at MVP stage (human-reviewed adjustments before any algorithm).
+- **"Why this family" cards**: every suggestion explains itself (shared values, age overlap, rhythm, distance). This is the trust centerpiece and the visible proof the product understands the user.
+
+### Density / cold-start mechanics
+- **Cluster-fill counter** shown to out-of-cluster families: "You're #7 of ~15 needed to open Long Beach" + personal referral link + Pillar-family incentive. Converts the biggest weakness into the growth engine.
+- **Founding-family offer** in Pasadena: first ~20 reviewed families get founding pricing locked for life, first-match priority, and a permanent "Founding family" profile marker. The first 20 families ARE the inventory — pay them in status and price.
+- **Seeding reality**: no existing homeschool network to seed from — that absence is the founding motivation. Acquisition comes from content (LA homeschool guide), referral mechanics, and direct founder effort in Pasadena.
+
+### Retention bridge (families waiting on a cluster)
+Monthly "How your neighborhood is growing" email: one short honest note — cluster count, who joined (anonymized sketch), progress in the open cluster, referral link, easy opt-down to "only email me when my neighborhood opens." No fake urgency, no noise. Signed Jimmy and Sara.
