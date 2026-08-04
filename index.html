@@ -995,6 +995,75 @@
     return localStorage.getItem('gadugy-intake-completed') === 'true';
   }
 
+  function profileEditToken() {
+    return new URLSearchParams(window.location.search).get('edit') || localStorage.getItem('gadugy-edit-token');
+  }
+
+  async function loadProfileFromEditLink() {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('edit');
+    if (!token) return;
+    try {
+      const response = await fetch(`${SUPABASE_URL}/functions/v1/get-profile-by-token`, {
+        method: 'POST',
+        headers: {
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ token })
+      });
+      const result = await response.json();
+      if (!response.ok || !result.profile) {
+        const status = document.getElementById('early-access-status');
+        showScreen('intake');
+        if (status) {
+          status.classList.add('on');
+          status.textContent = result.error === 'Invalid or expired link'
+            ? 'That profile link has expired. Request a fresh one by replying to your welcome email.'
+            : 'We could not load your profile from that link. Please try again.';
+        }
+        return;
+      }
+      localStorage.setItem('gadugy-edit-token', token);
+      localStorage.setItem('gadugy-intake-completed', 'true');
+      localStorage.setItem('gadugy-early-access-draft', JSON.stringify(intakeRowToApplication(result.profile)));
+      window.history.replaceState({}, '', window.location.pathname);
+      hydrateProfileBuilder();
+      showScreen('profile');
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  function intakeRowToApplication(row) {
+    return {
+      parentName: row.parent_name,
+      email: row.email,
+      cluster: row.community_cluster,
+      otherCity: row.other_city || '',
+      stage: row.homeschool_stage,
+      ageRanges: (row.children_age_ranges || []).join(', '),
+      communityGoals: (row.community_goals || []).join(', '),
+      communityGoalOther: row.community_goal_other || '',
+      familyCultureWords: row.family_culture_words || '',
+      coreValues: (row.core_values || []).join(', '),
+      coreValuesOther: row.core_values_other || '',
+      valuesInPractice: row.values_in_practice || '',
+      homeschoolReasons: row.homeschool_reasons || '',
+      educationAspirations: (row.education_aspirations || []).join(', '),
+      educationAspirationOther: row.education_aspiration_other || '',
+      familyValues: (row.family_values || []).join(', '),
+      familyInterests: row.family_interests || '',
+      distancePreference: row.distance_preference || '',
+      currentSetup: row.current_setup || '',
+      connectionGoals: (row.connection_goals || []).join(', '),
+      connectionGoalOther: row.connection_goal_other || '',
+      nontraditionalSubjects: row.nontraditional_subjects || '',
+      intro: row.intro || ''
+    };
+  }
+
   function showScreen(id) {
     if ((id === 'profile' || id === 'thankyou') && !intakeCompleted()) {
       const status = document.getElementById('early-access-status');
@@ -1343,8 +1412,12 @@
 
   window.addEventListener('load', initMaps);
 
-  const saved = localStorage.getItem('gsf-screen');
-  if (saved && document.getElementById(saved)) showScreen(saved);
+  if (new URLSearchParams(window.location.search).get('edit')) {
+    loadProfileFromEditLink();
+  } else {
+    const saved = localStorage.getItem('gsf-screen');
+    if (saved && document.getElementById(saved)) showScreen(saved);
+  }
 </script>
 </body>
 </html>

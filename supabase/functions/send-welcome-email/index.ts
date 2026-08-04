@@ -13,8 +13,11 @@ type WebhookPayload = {
 };
 
 const resendApiKey = Deno.env.get('RESEND_API_KEY');
-const fromEmail = Deno.env.get('WELCOME_EMAIL_FROM') || 'Gadugy <hello@gadugy.com>';
+const fromEmail = Deno.env.get('WELCOME_EMAIL_FROM') || 'Gadugy <hello@contact.gadugy.com>';
 const replyToEmail = Deno.env.get('WELCOME_EMAIL_REPLY_TO') || 'hello@gadugy.com';
+const siteUrl = (Deno.env.get('SITE_URL') || 'https://gadugy.com').replace(/\/$/, '');
+const supabaseUrl = Deno.env.get('SUPABASE_URL');
+const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
 function jsonResponse(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
@@ -27,10 +30,34 @@ function neighborhood(record: IntakeSubmissionRecord) {
   return record.community_cluster === 'Other' && record.other_city ? record.other_city : record.community_cluster;
 }
 
-function welcomeHtml(record: IntakeSubmissionRecord) {
+async function makeProfileEditLink(intakeId: string): Promise<string | null> {
+  if (!supabaseUrl || !serviceRoleKey) return null;
+  try {
+    const response = await fetch(`${supabaseUrl}/rest/v1/rpc/make_profile_edit_token`, {
+      method: 'POST',
+      headers: {
+        apikey: serviceRoleKey,
+        authorization: `Bearer ${serviceRoleKey}`,
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({ p_intake_id: intakeId })
+    });
+    if (!response.ok) return null;
+    const token = await response.json();
+    return token ? `${siteUrl}/?edit=${token}` : null;
+  } catch {
+    return null;
+  }
+}
+
+function welcomeHtml(record: IntakeSubmissionRecord, editLink: string | null) {
   const name = record.parent_name || 'there';
   const cluster = neighborhood(record);
   const clusterLine = cluster ? `<p>We saved your request for <strong>${cluster}</strong>.</p>` : '';
+  const cta = editLink
+    ? `<p style="margin:28px 0 8px"><a href="${editLink}" style="display:inline-block;background:#8da878;color:#fffdf8;text-decoration:none;font-weight:700;border-radius:99px;padding:14px 30px">Set up your family profile &rarr;</a></p>
+       <p style="font-size:13px;color:#8a7a68">This link is just for you and works for 30 days. It opens your profile with your intake answers already filled in.</p>`
+    : '';
   return `
     <div style="font-family:Inter,Arial,sans-serif;color:#3f362a;line-height:1.6;max-width:620px;margin:auto;padding:24px">
       <h1 style="color:#5f6f52">Welcome to Gadugy early access</h1>
@@ -39,12 +66,14 @@ function welcomeHtml(record: IntakeSubmissionRecord) {
       ${clusterLine}
       <h2 style="color:#5f6f52;font-size:20px">What happens next</h2>
       <ol>
-        <li>We review incoming requests by neighborhood and homeschool stage.</li>
-        <li>When your local cluster is ready, we will email you instructions to complete your profile.</li>
-        <li>After profile completion, Gadugy can start suggesting nearby family matches.</li>
+        <li>Set up your family profile. Everything from your intake form is already saved, so this is light work: a short intro, a few preferences, and your privacy choices.</li>
+        <li>We review every family by hand. Expect to hear from us within 2 to 3 days.</li>
+        <li>Matching opens neighborhood by neighborhood. The more complete your profile, the better your first matches will be.</li>
       </ol>
-      <p>If you want to add context before then, reply to this email.</p>
-      <p>Warmly,<br/>Gadugy</p>
+      ${cta}
+      <p>Questions, hesitations, or hopes for what you will find here? Hit reply. We read every note.</p>
+      <p>With gratitude,<br/>Jimmy and Sara<br/>Founders, Gadugy</p>
+      <p style="font-size:13px;color:#8a7a68;font-style:italic">P.S. Child names are never public, your exact address is never shown, and every family is reviewed by a real person. Trust from the first click.</p>
     </div>
   `;
 }
@@ -57,6 +86,8 @@ Deno.serve(async (request) => {
   const record = payload.record;
   if (!record?.email) return jsonResponse({ error: 'Missing intake record email' }, 400);
 
+  const editLink = record.id ? await makeProfileEditLink(record.id) : null;
+
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
@@ -68,11 +99,11 @@ Deno.serve(async (request) => {
       to: [record.email],
       reply_to: replyToEmail,
       subject: 'Welcome to Gadugy early access',
-      html: welcomeHtml(record)
+      html: welcomeHtml(record, editLink)
     })
   });
 
   const result = await response.json().catch(() => ({}));
   if (!response.ok) return jsonResponse({ error: 'Email provider failed', detail: result }, 502);
-  return jsonResponse({ ok: true, result });
+  return jsonResponse({ ok: true, result, editLinkIncluded: Boolean(editLink) });
 });
