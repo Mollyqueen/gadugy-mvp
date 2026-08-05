@@ -1021,6 +1021,27 @@
     analytics.push({ event: name, ...details, timestamp: new Date().toISOString() });
   }
 
+  // Activity tracking for identified families (those who arrived via an edit link).
+  let activityIntakeId = null;
+
+  function logActivity(event, screen) {
+    if (!activityIntakeId) return;
+    fetch(`${SUPABASE_URL}/rest/v1/activity_events`, {
+      method: 'POST',
+      headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+      body: JSON.stringify({ intake_id: activityIntakeId, event, screen: screen || null })
+    }).catch(() => {});
+  }
+
+  function startActivityHeartbeat() {
+    setInterval(() => {
+      if (document.visibilityState === 'visible') {
+        const active = document.querySelector('.screen.active');
+        logActivity('heartbeat', active?.id || null);
+      }
+    }, 60000);
+  }
+
   function intakeCompleted() {
     return localStorage.getItem('gadugy-intake-completed') === 'true';
   }
@@ -1072,13 +1093,88 @@
         <td style="font-size:12px">${escapeHtml(values)}</td>
         <td style="font-size:12px">${escapeHtml(f.welcome_email_status)}</td>
         <td style="font-size:12px;color:var(--muted)">${when}</td>
+        <td><button class="btn btn-outline btn-sm" onclick="openFamilyDetail('${f.id}')">View</button></td>
       </tr>`;
     }).join('');
     document.getElementById('admin-table').innerHTML = `<table style="width:100%;border-collapse:collapse;font-family:var(--sans);font-size:13px">
       <thead><tr style="text-align:left;border-bottom:2px solid var(--line)">
-        <th style="padding:10px 12px">Family</th><th style="padding:10px 12px">Location</th><th style="padding:10px 12px">Stage</th><th style="padding:10px 12px">Kids</th><th style="padding:10px 12px">Values</th><th style="padding:10px 12px">Email</th><th style="padding:10px 12px">Joined</th>
-      </tr></thead><tbody>${rows || '<tr><td colspan="7" style="padding:20px;color:var(--muted)">No families yet.</td></tr>'}</tbody></table>`;
+        <th style="padding:10px 12px">Family</th><th style="padding:10px 12px">Location</th><th style="padding:10px 12px">Stage</th><th style="padding:10px 12px">Kids</th><th style="padding:10px 12px">Values</th><th style="padding:10px 12px">Email</th><th style="padding:10px 12px">Joined</th><th style="padding:10px 12px"></th>
+      </tr></thead><tbody>${rows || '<tr><td colspan="8" style="padding:20px;color:var(--muted)">No families yet.</td></tr>'}</tbody></table>`;
   }
+
+  function adminHeaders() {
+    return { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' };
+  }
+
+  async function adminAction(payload) {
+    const token = localStorage.getItem('gadugy-admin-token');
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/admin-family-actions`, {
+      method: 'POST', headers: adminHeaders(), body: JSON.stringify({ token, ...payload })
+    });
+    return { ok: response.ok, data: await response.json().catch(() => ({})) };
+  }
+
+  async function openFamilyDetail(id) {
+    const { ok, data } = await adminAction({ action: 'detail', id });
+    if (!ok) return;
+    const f = data.family;
+    const cluster = f.community_cluster === 'Other' && f.other_city ? f.other_city : f.community_cluster;
+    const act = await adminAction({ action: 'activity', id });
+    const actRows = (act.data?.activity || []).slice(0, 7).map(a =>
+      `<div class="value-row"><span>${escapeHtml(a.day)}</span><span class="tag">${a.minutes_active} min · ${a.page_views} views</span></div>`).join('') || '<p class="bodycopy">No activity yet.</p>';
+    const fields = [
+      ['Email', f.email], ['Location', cluster], ['Stage', f.homeschool_stage],
+      ['Kids ages', (f.children_age_ranges || []).join(', ')],
+      ['Core values', (f.core_values || []).join(', ') + (f.core_values_other ? `, ${f.core_values_other}` : '')],
+      ['Values in practice', f.values_in_practice], ['Culture words', f.family_culture_words],
+      ['Hoping to find', (f.community_goals || []).join(', ') + (f.community_goal_other ? `, ${f.community_goal_other}` : '')],
+      ['Why homeschooling', f.homeschool_reasons], ['School concerns', f.school_issues],
+      ['Homeschool fears', f.homeschool_fears], ['Family interests', f.family_interests],
+      ['Distance', f.distance_preference], ['Setup', f.current_setup],
+      ['Hopes from families', (f.connection_goals || []).join(', ')], ['Beyond school', f.nontraditional_subjects],
+      ['Intro', f.intro], ['Referral', [f.referral_source, f.referral_code].filter(Boolean).join(' · ')],
+      ['Price variant', f.price_variant ? `$${f.price_variant}` : ''], ['Status', f.status]
+    ].filter(([, v]) => v);
+    const overlay = document.createElement('div');
+    overlay.id = 'family-detail-overlay';
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(40,32,24,.45);z-index:200;display:flex;align-items:flex-start;justify-content:center;padding:40px 16px;overflow:auto';
+    overlay.innerHTML = `<div class="panel" style="max-width:720px;width:100%;background:var(--surface)">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+        <div><h3 style="margin-bottom:2px">${escapeHtml(f.parent_name)}</h3><div class="meta">${escapeHtml(cluster)} · joined ${f.created_at ? new Date(f.created_at).toLocaleDateString() : ''}</div></div>
+        <button class="btn btn-outline btn-sm" onclick="document.getElementById('family-detail-overlay').remove()">Close</button>
+      </div>
+      <div style="height:16px"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        ${['approved','waitlisted','rejected','reviewing'].map(s => `<button class="btn ${f.status === s ? 'btn-primary' : 'btn-outline'} btn-sm" onclick="setFamilyStatus('${f.id}','${s}')">${s}</button>`).join('')}
+      </div>
+      <div style="height:16px"></div>
+      ${fields.map(([k, v]) => `<div class="value-row"><span><strong style="font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">${escapeHtml(k)}</strong><br>${escapeHtml(v)}</span></div>`).join('')}
+      <div style="height:16px"></div>
+      <h3>Activity (last 7 days)</h3>${actRows}
+      <div style="height:16px"></div>
+      <label style="font:600 13px/1 var(--sans)">Internal notes</label>
+      <textarea id="admin-notes-${f.id}" style="width:100%;margin-top:8px" rows="3">${escapeHtml(f.admin_notes || '')}</textarea>
+      <div style="height:12px"></div>
+      <button class="btn btn-outline btn-sm" onclick="saveFamilyNotes('${f.id}')">Save notes</button>
+      <span id="notes-status-${f.id}" style="font-size:12px;color:var(--muted);margin-left:10px"></span>
+    </div>`;
+    document.body.appendChild(overlay);
+  }
+  window.openFamilyDetail = openFamilyDetail;
+
+  async function setFamilyStatus(id, status) {
+    const { ok } = await adminAction({ action: 'set_status', id, status });
+    if (ok) { document.getElementById('family-detail-overlay')?.remove(); loadAdminFamilies(); }
+  }
+  window.setFamilyStatus = setFamilyStatus;
+
+  async function saveFamilyNotes(id) {
+    const notes = document.getElementById(`admin-notes-${id}`)?.value || '';
+    const { ok } = await adminAction({ action: 'set_notes', id, notes });
+    const el = document.getElementById(`notes-status-${id}`);
+    if (el) el.textContent = ok ? 'Saved ✓' : 'Save failed';
+  }
+  window.saveFamilyNotes = saveFamilyNotes;
 
   function profileEditToken() {
     return new URLSearchParams(window.location.search).get('edit') || localStorage.getItem('gadugy-edit-token');
@@ -1113,6 +1209,9 @@
       localStorage.setItem('gadugy-edit-token', token);
       localStorage.setItem('gadugy-intake-completed', 'true');
       localStorage.setItem('gadugy-early-access-draft', JSON.stringify(intakeRowToApplication(result.profile)));
+      activityIntakeId = result.profile.id || null;
+      startActivityHeartbeat();
+      logActivity('page_view', 'profile');
       window.history.replaceState({}, '', window.location.pathname);
       hydrateProfileBuilder();
       showScreen('profile');
