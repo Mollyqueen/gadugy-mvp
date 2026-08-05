@@ -704,6 +704,36 @@
       </div>
     </section>
 
+    <!-- ================= ADMIN ================= -->
+    <section id="admin" class="screen">
+      <div class="container app-band">
+        <div class="dashboard-header">
+          <div>
+            <div class="eyebrow" style="background:rgba(141,168,120,.10);color:var(--orange-deep);border-color:rgba(141,168,120,.30)">Founders only</div>
+            <h2>Family signups</h2>
+            <p class="lead-dark" id="admin-subtitle">Enter the admin key to view early access families.</p>
+          </div>
+        </div>
+        <div id="admin-gate" class="panel" style="max-width:460px;margin:0 auto">
+          <label for="admin-token" style="font:600 13px/1 var(--sans);display:block;margin-bottom:8px">Admin key</label>
+          <input id="admin-token" type="password" placeholder="Paste the founders admin key" style="width:100%" />
+          <div style="height:14px"></div>
+          <button class="btn btn-primary" onclick="loadAdminFamilies()">View families</button>
+          <div id="admin-error" class="form-status notice" role="status"></div>
+        </div>
+        <div id="admin-content" style="display:none">
+          <div class="panel" style="margin-bottom:20px">
+            <div class="field-grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
+              <div><div class="meta">Total families</div><h3 id="admin-total">0</h3></div>
+              <div><div class="meta">Pasadena / Foothill</div><h3 id="admin-pasadena">0</h3></div>
+              <div><div class="meta">Welcome email sent</div><h3 id="admin-emailed">0</h3></div>
+            </div>
+          </div>
+          <div id="admin-table" class="panel" style="overflow-x:auto"></div>
+        </div>
+      </div>
+    </section>
+
     <!-- ================= THANK YOU ================= -->
     <section id="thankyou" class="screen">
       <div class="container app-band">
@@ -993,6 +1023,61 @@
 
   function intakeCompleted() {
     return localStorage.getItem('gadugy-intake-completed') === 'true';
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+
+  async function loadAdminFamilies() {
+    const tokenInput = document.getElementById('admin-token');
+    const error = document.getElementById('admin-error');
+    const token = (tokenInput?.value || '').trim();
+    if (!token) { if (error) { error.classList.add('on'); error.textContent = 'Enter the admin key.'; } return; }
+    try {
+      const response = await fetch(`${SUPABASE_URL}/functions/v1/admin-list-families`, {
+        method: 'POST',
+        headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token })
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        if (error) { error.classList.add('on'); error.textContent = response.status === 401 ? 'Wrong admin key.' : (result.error || 'Could not load families.'); }
+        return;
+      }
+      localStorage.setItem('gadugy-admin-token', token);
+      renderAdminFamilies(result.families || []);
+    } catch (err) {
+      if (error) { error.classList.add('on'); error.textContent = 'Network error loading families.'; }
+    }
+  }
+  window.loadAdminFamilies = loadAdminFamilies;
+
+  function renderAdminFamilies(families) {
+    document.getElementById('admin-gate').style.display = 'none';
+    document.getElementById('admin-content').style.display = 'block';
+    document.getElementById('admin-total').textContent = families.length;
+    document.getElementById('admin-pasadena').textContent = families.filter(f => f.community_cluster === 'Pasadena / Foothill area').length;
+    document.getElementById('admin-emailed').textContent = families.filter(f => f.welcome_email_status === 'sent').length;
+    const rows = families.map(f => {
+      const cluster = f.community_cluster === 'Other' && f.other_city ? f.other_city : f.community_cluster;
+      const ages = Array.isArray(f.children_age_ranges) ? f.children_age_ranges.join(', ') : '';
+      const values = Array.isArray(f.core_values) ? f.core_values.join(', ') : '';
+      const when = f.created_at ? new Date(f.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+      return `<tr>
+        <td><strong>${escapeHtml(f.parent_name)}</strong><br><span style="color:var(--muted);font-size:12px">${escapeHtml(f.email)}</span></td>
+        <td>${escapeHtml(cluster)}</td>
+        <td>${escapeHtml(f.homeschool_stage || '')}</td>
+        <td style="font-size:12px">${escapeHtml(ages)}</td>
+        <td style="font-size:12px">${escapeHtml(values)}</td>
+        <td style="font-size:12px">${escapeHtml(f.welcome_email_status)}</td>
+        <td style="font-size:12px;color:var(--muted)">${when}</td>
+      </tr>`;
+    }).join('');
+    document.getElementById('admin-table').innerHTML = `<table style="width:100%;border-collapse:collapse;font-family:var(--sans);font-size:13px">
+      <thead><tr style="text-align:left;border-bottom:2px solid var(--line)">
+        <th style="padding:10px 12px">Family</th><th style="padding:10px 12px">Location</th><th style="padding:10px 12px">Stage</th><th style="padding:10px 12px">Kids</th><th style="padding:10px 12px">Values</th><th style="padding:10px 12px">Email</th><th style="padding:10px 12px">Joined</th>
+      </tr></thead><tbody>${rows || '<tr><td colspan="7" style="padding:20px;color:var(--muted)">No families yet.</td></tr>'}</tbody></table>`;
   }
 
   function profileEditToken() {
@@ -1414,6 +1499,8 @@
 
   if (new URLSearchParams(window.location.search).get('edit')) {
     loadProfileFromEditLink();
+  } else if (new URLSearchParams(window.location.search).has('admin')) {
+    showScreen('admin');
   } else {
     const saved = localStorage.getItem('gsf-screen');
     if (saved && document.getElementById(saved)) showScreen(saved);
