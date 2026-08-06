@@ -13,9 +13,9 @@ type WebhookPayload = {
 };
 
 const resendApiKey = Deno.env.get('RESEND_API_KEY');
-const fromEmail = Deno.env.get('WELCOME_EMAIL_FROM') || 'Gadugy <hello@contact.gadugy.com>';
-const replyToEmail = Deno.env.get('WELCOME_EMAIL_REPLY_TO') || 'hello@gadugy.com';
-const siteUrl = (Deno.env.get('SITE_URL') || 'https://gadugy.com').replace(/\/$/, '');
+const fromEmail = Deno.env.get('WELCOME_EMAIL_FROM') || 'Gather Parents <hello@contact.gatherparents.com>';
+const replyToEmail = Deno.env.get('WELCOME_EMAIL_REPLY_TO') || 'hello@gatherparents.com';
+const siteUrl = (Deno.env.get('SITE_URL') || 'https://gatherparents.com').replace(/\/$/, '');
 const supabaseUrl = Deno.env.get('SUPABASE_URL');
 const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
@@ -60,9 +60,9 @@ function welcomeHtml(record: IntakeSubmissionRecord, editLink: string | null) {
     : '';
   return `
     <div style="font-family:Inter,Arial,sans-serif;color:#3f362a;line-height:1.6;max-width:620px;margin:auto;padding:24px">
-      <h1 style="color:#5f6f52">Welcome to Gadugy early access</h1>
+      <h1 style="color:#5f6f52">Welcome to Gather Parents early access</h1>
       <p>Hi ${name},</p>
-      <p>Thank you for requesting early access to Gadugy. Your intake answers were saved successfully.</p>
+      <p>Thank you for requesting early access to Gather Parents. Your intake answers were saved successfully.</p>
       ${clusterLine}
       <h2 style="color:#5f6f52;font-size:20px">What happens next</h2>
       <ol>
@@ -72,7 +72,7 @@ function welcomeHtml(record: IntakeSubmissionRecord, editLink: string | null) {
       </ol>
       ${cta}
       <p>Questions, hesitations, or hopes for what you will find here? Hit reply. We read every note.</p>
-      <p>With gratitude,<br/>Jimmy and Sara<br/>Founders, Gadugy</p>
+      <p>With gratitude,<br/>Jimmy and Sara<br/>Founders, Gather Parents</p>
       <p style="font-size:13px;color:#8a7a68;font-style:italic">P.S. Child names are never public, your exact address is never shown, and every family is reviewed by a real person. Trust from the first click.</p>
     </div>
   `;
@@ -98,7 +98,7 @@ Deno.serve(async (request) => {
       from: fromEmail,
       to: [record.email],
       reply_to: replyToEmail,
-      subject: 'Welcome to Gadugy early access',
+      subject: 'Welcome to Gather Parents early access',
       html: welcomeHtml(record, editLink)
     })
   });
